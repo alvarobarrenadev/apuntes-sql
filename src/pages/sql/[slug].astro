@@ -6,12 +6,12 @@ import Breadcrumbs from '../../components/Breadcrumbs.astro';
 import Section from '../../components/Section.astro';
 import EmptyState from '../../components/EmptyState.astro';
 import CodeBlock from '../../components/CodeBlock.astro';
+import Callout from '../../components/Callout.astro';
 import LessonNav from '../../components/LessonNav.astro';
 import CompleteButton from '../../components/CompleteButton.astro';
 import { lessons } from '../../data/sql';
 
 export function getStaticPaths() {
-  // The final project has its own dedicated route — exclude it here.
   return lessons
     .filter((l) => l.type !== 'project')
     .map((l) => ({ params: { slug: l.slug }, props: { lesson: l } }));
@@ -28,23 +28,13 @@ const TYPE_META = {
 const t = TYPE_META[lesson.type];
 
 const STATUS_BADGE = {
-  pending:       { label: 'Pendiente',     variant: 'muted' as const,   dot: false },
-  'in-progress': { label: 'En curso',      variant: 'primary' as const, dot: true },
-  completed:     { label: 'Completada',    variant: 'sql' as const,     dot: false },
+  pending:       { label: 'Pendiente',  variant: 'muted' as const,   dot: false },
+  'in-progress': { label: 'En curso',   variant: 'primary' as const, dot: true },
+  completed:     { label: 'Completada', variant: 'sql' as const,     dot: false },
 };
 const status = STATUS_BADGE[lesson.status];
 
-const sections = [
-  { id: 'resumen',     n: '01', title: 'Resumen rápido',          empty: 'Resumen pendiente.' },
-  { id: 'conceptos',   n: '02', title: 'Conceptos clave',          empty: 'Conceptos clave pendientes.' },
-  { id: 'contenido',   n: '03', title: 'Contenido de la clase',    empty: 'Pendiente de completar.' },
-  { id: 'codigo',      n: '04', title: 'Código y ejemplos',        empty: 'Código pendiente.' },
-  { id: 'errores',     n: '05', title: 'Errores comunes',          empty: 'Sección pendiente.' },
-  { id: 'practicas',   n: '06', title: 'Buenas prácticas',         empty: 'Sección pendiente.' },
-  { id: 'ejercicios',  n: '07', title: 'Ejercicios',               empty: 'Ejercicios pendientes.' },
-  { id: 'checklist',   n: '08', title: 'Checklist final',          empty: 'Checklist pendiente.' },
-  { id: 'recursos',    n: '09', title: 'Recursos relacionados',    empty: 'Recursos pendientes.' },
-];
+const hasContent = lesson.contenido.length > 0;
 ---
 
 <DocsLayout title={`${lesson.classNumber} · ${lesson.title} — Apuntes SQL`} activeSlug={lesson.slug}>
@@ -70,9 +60,7 @@ const sections = [
 
       {lesson.summary
         ? <p class="class-lead">{lesson.summary}</p>
-        : <p class="class-lead muted">
-            <em>Apuntes pendientes de añadir.</em>
-          </p>}
+        : <p class="class-lead muted"><em>Apuntes pendientes de añadir.</em></p>}
 
       {lesson.tags.length > 0 && (
         <div class="class-tags">
@@ -80,27 +68,140 @@ const sections = [
         </div>
       )}
 
-      {/* Sections — all empty states until the transcripts arrive */}
-      {sections.map((s) => (
-        <Section id={s.id} title={s.title} eyebrow={s.n}>
-          {s.id === 'codigo' ? (
-            <CodeBlock empty />
-          ) : s.id === 'conceptos' ? (
-            <div class="concepts-grid">
-              {[1, 2, 3, 4].map(() => (
+      {/* 01 — RESUMEN */}
+      <Section id="resumen" title="Resumen rápido" eyebrow="01">
+        {lesson.summary
+          ? <p class="lesson-prose__p">{lesson.summary}</p>
+          : <EmptyState title="Pendiente de completar." />}
+      </Section>
+
+      {/* 02 — CONCEPTOS CLAVE */}
+      <Section id="conceptos" title="Conceptos clave" eyebrow="02">
+        {lesson.keyConcepts.length > 0
+          ? <div class="concepts-grid">
+              {lesson.keyConcepts.map((kc) => (
                 <div class="card concept-card">
-                  <div class="concept-card__fn">— pendiente —</div>
-                  <p class="concept-card__desc muted">
-                    Concepto pendiente de añadir.
-                  </p>
+                  <div class="concept-card__fn">{kc.term}</div>
+                  <p class="concept-card__desc">{kc.definition}</p>
                 </div>
               ))}
             </div>
-          ) : (
-            <EmptyState title={s.empty} />
-          )}
-        </Section>
-      ))}
+          : <EmptyState title="Pendiente de completar." />}
+      </Section>
+
+      {/* 03 — CONTENIDO */}
+      <Section id="contenido" title="Contenido de la clase" eyebrow="03">
+        {hasContent
+          ? <div class="lesson-prose">
+              {lesson.contenido.map((section) => (
+                <div class="lesson-prose__section">
+                  {section.heading && <h3 class="lesson-prose__h3">{section.heading}</h3>}
+                  {section.blocks.map((block) => (
+                    <>
+                      {block.type === 'p' && (
+                        <p class="lesson-prose__p">{block.text}</p>
+                      )}
+                      {block.type === 'ul' && (
+                        <ul class="lesson-prose__list">
+                          {block.items.map((item) => <li>{item}</li>)}
+                        </ul>
+                      )}
+                      {block.type === 'ol' && (
+                        <ol class="lesson-prose__list lesson-prose__list--ol">
+                          {block.items.map((item) => <li>{item}</li>)}
+                        </ol>
+                      )}
+                      {block.type === 'callout' && (
+                        <Callout type={block.variant} title={block.title}>
+                          {block.text}
+                        </Callout>
+                      )}
+                      {block.type === 'table' && (
+                        <div class="lesson-prose__table-wrap">
+                          <table class="lesson-prose__table">
+                            <thead>
+                              <tr>
+                                {block.headers.map((h) => <th>{h}</th>)}
+                              </tr>
+                            </thead>
+                            <tbody>
+                              {block.rows.map((row) => (
+                                <tr>
+                                  {row.map((cell) => <td>{cell}</td>)}
+                                </tr>
+                              ))}
+                            </tbody>
+                          </table>
+                        </div>
+                      )}
+                    </>
+                  ))}
+                </div>
+              ))}
+            </div>
+          : <EmptyState title="Pendiente de completar." />}
+      </Section>
+
+      {/* 04 — CÓDIGO Y EJEMPLOS */}
+      <Section id="codigo" title="Código y ejemplos" eyebrow="04">
+        {lesson.codeExamples.length > 0
+          ? <div class="code-examples">
+              {lesson.codeExamples.map((ex) => (
+                <div class="code-example">
+                  {ex.label && <p class="code-example__label">{ex.label}</p>}
+                  <CodeBlock code={ex.code} lang={ex.lang ?? 'sql'} />
+                  {ex.note && <p class="code-example__note">{ex.note}</p>}
+                </div>
+              ))}
+            </div>
+          : <CodeBlock empty />}
+      </Section>
+
+      {/* 05 — ERRORES COMUNES */}
+      <Section id="errores" title="Errores comunes" eyebrow="05">
+        {lesson.errores.length > 0
+          ? <ul class="lesson-prose__list lesson-prose__list--errors">
+              {lesson.errores.map((e) => <li>{e}</li>)}
+            </ul>
+          : <EmptyState title="Pendiente de completar." />}
+      </Section>
+
+      {/* 06 — BUENAS PRÁCTICAS */}
+      <Section id="practicas" title="Buenas prácticas" eyebrow="06">
+        {lesson.practicas.length > 0
+          ? <ul class="lesson-prose__list lesson-prose__list--tips">
+              {lesson.practicas.map((p) => <li>{p}</li>)}
+            </ul>
+          : <EmptyState title="Pendiente de completar." />}
+      </Section>
+
+      {/* 07 — EJERCICIOS */}
+      <Section id="ejercicios" title="Ejercicios" eyebrow="07">
+        {lesson.ejercicios.length > 0
+          ? <ol class="lesson-prose__list lesson-prose__list--ol">
+              {lesson.ejercicios.map((e) => <li>{e}</li>)}
+            </ol>
+          : <EmptyState title="Pendiente de completar." />}
+      </Section>
+
+      {/* 08 — CHECKLIST */}
+      <Section id="checklist" title="Checklist final" eyebrow="08">
+        {lesson.checklist.length > 0
+          ? <ul class="lesson-checklist">
+              {lesson.checklist.map((item) => (
+                <li class="lesson-checklist__item">
+                  <span class="lesson-checklist__box" aria-hidden="true" />
+                  <span>{item.text}</span>
+                </li>
+              ))}
+            </ul>
+          : <EmptyState title="Pendiente de completar." />}
+      </Section>
+
+      {/* 09 — RECURSOS */}
+      <Section id="recursos" title="Recursos relacionados" eyebrow="09">
+        <EmptyState title="Pendiente de completar." />
+      </Section>
 
       <LessonNav prevSlug={lesson.previousSlug} nextSlug={lesson.nextSlug} />
 
@@ -112,19 +213,20 @@ const sections = [
     <!-- TOC -->
     <aside class="toc" aria-label="Índice de la clase">
       <p class="toc__title">En esta clase</p>
-      {sections.map((s) => (
-        <a class="toc__link" href={`#${s.id}`}>{s.title}</a>
-      ))}
-      <div class="toc__divider" aria-hidden="true" />
-      <p class="toc__title">Acciones</p>
-      <a class="side-link" href="#" aria-disabled="true"><Icon name="bookmark" size={13} />Guardar</a>
-      <a class="side-link" href="#" aria-disabled="true"><Icon name="share" size={13} />Compartir</a>
+      <a class="toc__link" href="#resumen">Resumen rápido</a>
+      <a class="toc__link" href="#conceptos">Conceptos clave</a>
+      <a class="toc__link" href="#contenido">Contenido</a>
+      <a class="toc__link" href="#codigo">Código y ejemplos</a>
+      <a class="toc__link" href="#errores">Errores comunes</a>
+      <a class="toc__link" href="#practicas">Buenas prácticas</a>
+      <a class="toc__link" href="#ejercicios">Ejercicios</a>
+      <a class="toc__link" href="#checklist">Checklist</a>
+      <a class="toc__link" href="#recursos">Recursos</a>
     </aside>
   </div>
 </DocsLayout>
 
 <script>
-  // TOC scroll spy
   const sections = Array.from(document.querySelectorAll<HTMLElement>('article.docs__article section.section'));
   const links = new Map<string, HTMLAnchorElement>();
   document.querySelectorAll<HTMLAnchorElement>('.toc .toc__link').forEach((a) => {

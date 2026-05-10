@@ -73,6 +73,199 @@
   margin: 0;
 }
 
+// ── Prose (contenido de clase) ───────────────────────────────────
+
+.lesson-prose {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.lesson-prose__section {
+  & + & {
+    margin-top: 2rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--line);
+  }
+}
+
+.lesson-prose__h3 {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--fg);
+  margin: 0 0 0.75rem;
+  letter-spacing: -0.01em;
+}
+
+.lesson-prose__p {
+  color: var(--fg-2);
+  font-size: 0.9375rem;
+  line-height: 1.7;
+  margin: 0 0 0.75rem;
+
+  &:last-child { margin-bottom: 0; }
+}
+
+.lesson-prose__list {
+  color: var(--fg-2);
+  font-size: 0.9375rem;
+  line-height: 1.65;
+  margin: 0 0 0.75rem;
+  padding-left: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.375rem;
+
+  &:last-child { margin-bottom: 0; }
+
+  li { padding-left: 0.25rem; }
+
+  &--ol {
+    list-style-type: decimal;
+
+    li::marker {
+      color: var(--sql);
+      font-weight: 600;
+      font-size: 0.875rem;
+    }
+  }
+
+  &--errors {
+    list-style: none;
+    padding-left: 0;
+    gap: 0.5rem;
+
+    li {
+      padding: 0.625rem 0.75rem;
+      border-left: 2px solid var(--err, #f87171);
+      background: rgba(248, 113, 113, 0.06);
+      border-radius: 0 6px 6px 0;
+      font-size: 0.875rem;
+      color: var(--fg-2);
+    }
+  }
+
+  &--tips {
+    list-style: none;
+    padding-left: 0;
+    gap: 0.5rem;
+
+    li {
+      padding: 0.625rem 0.75rem;
+      border-left: 2px solid var(--sql);
+      background: var(--sql-soft);
+      border-radius: 0 6px 6px 0;
+      font-size: 0.875rem;
+      color: var(--fg-2);
+    }
+  }
+}
+
+.lesson-prose__table-wrap {
+  overflow-x: auto;
+  margin: 0 0 0.75rem;
+  border-radius: 10px;
+  border: 1px solid var(--line);
+
+  &:last-child { margin-bottom: 0; }
+}
+
+.lesson-prose__table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.875rem;
+
+  thead {
+    background: var(--bg-3);
+
+    th {
+      padding: 0.625rem 0.875rem;
+      text-align: left;
+      font-weight: 600;
+      color: var(--fg);
+      border-bottom: 1px solid var(--line);
+      white-space: nowrap;
+    }
+  }
+
+  tbody {
+    tr:not(:last-child) td {
+      border-bottom: 1px solid var(--line);
+    }
+
+    tr:hover td {
+      background: rgba(255, 255, 255, 0.02);
+    }
+
+    td {
+      padding: 0.5625rem 0.875rem;
+      color: var(--fg-2);
+      vertical-align: top;
+    }
+
+    td:first-child {
+      font-weight: 500;
+      color: var(--fg);
+      white-space: nowrap;
+    }
+  }
+}
+
+// ── Code examples ────────────────────────────────────────────────
+
+.code-examples {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.code-example__label {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--fg-3);
+  margin: 0 0 0.5rem;
+  font-family: v.$mono-font;
+}
+
+.code-example__note {
+  font-size: 0.8125rem;
+  color: var(--fg-3);
+  line-height: 1.55;
+  margin: 0.5rem 0 0;
+  padding: 0.5rem 0.75rem;
+  border-left: 2px solid var(--line-2);
+}
+
+// ── Checklist ────────────────────────────────────────────────────
+
+.lesson-checklist {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.lesson-checklist__item {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  font-size: 0.9375rem;
+  color: var(--fg-2);
+  line-height: 1.55;
+}
+
+.lesson-checklist__box {
+  flex-shrink: 0;
+  width: 18px;
+  height: 18px;
+  border-radius: 5px;
+  border: 1.5px solid var(--line-2);
+  background: var(--bg-3);
+  margin-top: 0.125rem;
+}
+
 // Concepts grid (placeholder when empty, also used for filled cards)
 .concepts-grid {
   display: grid;
