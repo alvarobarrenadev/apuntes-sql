@@ -160,18 +160,28 @@ const hasContent = lesson.contenido.length > 0;
       {/* 05 — ERRORES COMUNES */}
       <Section id="errores" title="Errores comunes" eyebrow="05">
         {lesson.errores.length > 0
-          ? <ul class="lesson-prose__list lesson-prose__list--errors">
-              {lesson.errores.map((e) => <li>{e}</li>)}
-            </ul>
+          ? <div class="insight-cards">
+              {lesson.errores.map((e) => (
+                <div class="insight-card insight-card--err">
+                  <span class="insight-card__ico" aria-hidden="true">x</span>
+                  <span>{e}</span>
+                </div>
+              ))}
+            </div>
           : <EmptyState title="Pendiente de completar." />}
       </Section>
 
       {/* 06 — BUENAS PRÁCTICAS */}
       <Section id="practicas" title="Buenas prácticas" eyebrow="06">
         {lesson.practicas.length > 0
-          ? <ul class="lesson-prose__list lesson-prose__list--tips">
-              {lesson.practicas.map((p) => <li>{p}</li>)}
-            </ul>
+          ? <div class="insight-cards">
+              {lesson.practicas.map((p) => (
+                <div class="insight-card insight-card--tip">
+                  <span class="insight-card__ico" aria-hidden="true">✓</span>
+                  <span>{p}</span>
+                </div>
+              ))}
+            </div>
           : <EmptyState title="Pendiente de completar." />}
       </Section>
 

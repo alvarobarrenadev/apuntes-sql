@@ -17,9 +17,10 @@
 .section__eyebrow {
   font-family: v.$mono-font;
   font-size: 0.6875rem;
-  color: var(--fg-4);
-  letter-spacing: 0.05em;
+  color: var(--sql);
+  letter-spacing: 0.06em;
   white-space: nowrap;
+  opacity: 0.75;
 }
 
 .section__title {
