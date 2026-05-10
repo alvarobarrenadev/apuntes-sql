@@ -1,0 +1,35 @@
+---
+import Icon from './Icon.astro';
+
+interface Props {
+  slug: string;
+}
+
+const { slug } = Astro.props;
+---
+
+<div class="class-complete">
+  <div>
+    <p class="class-complete__title">¿Has terminado la clase?</p>
+    <p class="class-complete__sub">Márcala como repasada y vuelve cuando quieras revisarla.</p>
+  </div>
+  <button type="button" class="btn btn--success" data-complete={slug}>
+    <Icon name="check" size={12} stroke={2.5} />
+    Marcar como completada
+  </button>
+</div>
+
+<script>
+  // Local-only "complete" toggle (no persistence yet).
+  document.querySelectorAll<HTMLButtonElement>('[data-complete]').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const slug = btn.dataset.complete;
+      if (!slug) return;
+      const done = btn.getAttribute('aria-pressed') === 'true';
+      btn.setAttribute('aria-pressed', done ? 'false' : 'true');
+      btn.innerHTML = done
+        ? `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5 10 17l9-10"/></svg> Marcar como completada`
+        : `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5 10 17l9-10"/></svg> Completada`;
+    });
+  });
+</script>

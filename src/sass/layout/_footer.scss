@@ -1,0 +1,30 @@
+@use '@abstracts/variables' as v;
+@use '@abstracts/mixins' as m;
+
+
+.site-footer {
+  border-top: 1px solid var(--line);
+  padding: 1.5rem 1.25rem;
+  font-size: 0.8125rem;
+  color: var(--fg-3);
+  background: rgba(13, 15, 23, 0.5);
+
+  @include m.breakpoint(tablet) {
+    padding: 1.5rem 2.25rem;
+  }
+}
+
+.site-footer__inner {
+  max-width: v.$class-max;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0.625rem;
+  align-items: flex-start;
+
+  @include m.breakpoint(tablet) {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+  }
+}

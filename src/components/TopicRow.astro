@@ -1,0 +1,66 @@
+---
+import Icon from './Icon.astro';
+import Badge from './Badge.astro';
+import LessonRow from './LessonRow.astro';
+import type { Topic } from '../data/sql';
+import { topicStatus } from '../data/sql';
+
+interface Props {
+  topic: Topic;
+  open?: boolean;
+}
+
+const { topic, open = false } = Astro.props;
+const status = topicStatus(topic);
+const isFinal = topic.hasFinalProject;
+---
+
+<details class:list={['card', 'topic-row', { 'is-doing': status === 'in-progress' }]} open={open} data-open={open ? 'true' : 'false'}>
+  <summary class="topic-row__head">
+    <span class:list={[
+      'topic-row__num',
+      status === 'completed' ? 'is-done' : null,
+      status === 'in-progress' ? 'is-doing' : null,
+      isFinal ? 'is-final' : null,
+    ]}>
+      {status === 'completed' ? <Icon name="check" size={16} /> : topic.number}
+    </span>
+
+    <div class="topic-row__body">
+      <div class="topic-row__title">
+        <span>Tema {topic.number} · {topic.title}</span>
+        {isFinal && (
+          <Badge variant="warn">
+            <Icon name="trophy" size={10} />
+            Proyecto final
+          </Badge>
+        )}
+      </div>
+      <p class="topic-row__desc">{topic.description}</p>
+    </div>
+
+    <div class="topic-row__meta">
+      <span><Icon name="book" size={13} /> {topic.classCount} {topic.classCount === 1 ? 'clase' : 'clases'}</span>
+      <span><Icon name="clock" size={13} /> {topic.estimatedTime}</span>
+
+      {status === 'completed' && <Badge variant="sql"><Icon name="check" size={9} stroke={2.5} />Hecho</Badge>}
+      {status === 'in-progress' && <Badge variant="primary" dot>En curso</Badge>}
+      {status === 'pending' && <Badge variant="muted">Pendiente</Badge>}
+
+      <Icon name="chevron-down" size={14} class="topic-row__chevron" />
+    </div>
+  </summary>
+
+  <div class="topic-row__children">
+    {topic.lessons.map((l) => <LessonRow lesson={l} />)}
+  </div>
+</details>
+
+<script>
+  // Sync `data-open` with the native <details> toggle so the chevron rotates.
+  document.querySelectorAll<HTMLDetailsElement>('details.topic-row').forEach((d) => {
+    d.addEventListener('toggle', () => {
+      d.dataset.open = d.open ? 'true' : 'false';
+    });
+  });
+</script>

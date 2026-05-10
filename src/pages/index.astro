@@ -1,0 +1,174 @@
+---
+import DocsLayout from '../layouts/DocsLayout.astro';
+import Icon from '../components/Icon.astro';
+import Badge from '../components/Badge.astro';
+import TopicRow from '../components/TopicRow.astro';
+import ProgressBar from '../components/ProgressBar.astro';
+import { sqlModule, topics, lessons } from '../data/sql';
+
+const completed = lessons.filter((l) => l.status === 'completed').length;
+---
+
+<DocsLayout title="Apuntes SQL · Conquer Blocks" activeSlug={null}>
+  <div class="docs__inner sql-index">
+    <!-- Compact hero -->
+    <header class="sql-hero">
+      <p class="sql-hero__eyebrow">
+        <Icon name="database" size={11} />
+        Módulo SQL · Conquer Blocks
+      </p>
+      <h1 class="sql-hero__title">Apuntes SQL</h1>
+      <p class="sql-hero__lead">
+        Apuntes del módulo SQL del máster Conquer Blocks. Estructura del temario:
+        el contenido se irá añadiendo clase a clase.
+      </p>
+
+      <div class="sql-hero__stats">
+        <span><Icon name="layers" size={14} /><strong>{topics.length} temas</strong></span>
+        <span><Icon name="book" size={14} /><strong>{lessons.length} clases</strong></span>
+        <span><Icon name="trophy" size={14} /><strong>1 proyecto final</strong></span>
+        <span class="sql-hero__pending">
+          <Icon name="clock" size={13} />Contenido pendiente de añadir
+        </span>
+      </div>
+    </header>
+
+    <!-- Search + progress -->
+    <div class="sql-toolbar">
+      <form class="sql-search" role="search" onsubmit="return false">
+        <Icon name="search" size={16} />
+        <input
+          id="sql-search-input"
+          type="search"
+          placeholder="Buscar clase, tema o concepto…"
+          aria-label="Buscar en el temario SQL"
+          autocomplete="off"
+        />
+        <span class="sql-search__count" id="sql-search-count" aria-live="polite"></span>
+      </form>
+
+      <div class="sql-progress" aria-label="Progreso del temario">
+        <div class="sql-progress__head">
+          <span>Progreso</span>
+          <span class="muted">{completed} / {lessons.length} clases</span>
+        </div>
+        <ProgressBar value={completed} max={lessons.length} label="Progreso del temario" showMeta={false} />
+      </div>
+    </div>
+
+    <!-- Temario -->
+    <section class="sql-syllabus" aria-label="Temario SQL">
+      <div class="sql-syllabus__head">
+        <h2 class="h2">Temario</h2>
+        <span class="chip">{topics.length} temas · {lessons.length} clases</span>
+      </div>
+
+      <div class="topic-list" id="sql-topic-list">
+        {topics.map((t, i) => (
+          <div id={`tema-${t.number}`} data-topic-number={t.number}>
+            <TopicRow topic={t} open={i === 0} />
+          </div>
+        ))}
+      </div>
+
+      <p class="sql-syllabus__empty" id="sql-search-empty" hidden>
+        No se han encontrado clases ni temas que coincidan con la búsqueda.
+      </p>
+    </section>
+
+    <!-- Final project access -->
+    <a class="sql-final-access" href={`/${sqlModule.slug}/${sqlModule.finalProjectSlug}`}>
+      <span class="sql-final-access__icon" aria-hidden="true">
+        <Icon name="trophy" size={22} />
+      </span>
+      <span class="sql-final-access__body">
+        <span class="sql-final-access__eyebrow">Proyecto final</span>
+        <span class="sql-final-access__title">Sistema de Gestión de Biblioteca</span>
+        <span class="sql-final-access__sub">
+          Cierre del módulo SQL · Pendiente de instrucciones reales.
+        </span>
+      </span>
+      <Icon name="arrow-right" size={16} />
+    </a>
+  </div>
+</DocsLayout>
+
+<script>
+  const input = document.getElementById('sql-search-input') as HTMLInputElement | null;
+  const list = document.getElementById('sql-topic-list');
+  const empty = document.getElementById('sql-search-empty');
+  const countEl = document.getElementById('sql-search-count');
+
+  if (input && list && empty && countEl) {
+    const topicGroups = Array.from(list.querySelectorAll<HTMLElement>('[data-topic-number]'));
+
+    const norm = (s: string) =>
+      s.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '');
+
+    const apply = () => {
+      const q = norm(input.value.trim());
+      let matchedLessons = 0;
+      let visibleTopics = 0;
+
+      topicGroups.forEach((group) => {
+        const details = group.querySelector<HTMLDetailsElement>('details.topic-row');
+        if (!details) return;
+
+        const topicHead = details.querySelector('.topic-row__head');
+        const topicText = norm(topicHead?.textContent || '');
+        const lessonLinks = Array.from(details.querySelectorAll<HTMLAnchorElement>('.lesson-row'));
+
+        let topicVisible = false;
+
+        if (!q) {
+          lessonLinks.forEach((l) => l.removeAttribute('hidden'));
+          group.removeAttribute('hidden');
+          topicVisible = true;
+        } else {
+          let lessonMatchesInTopic = 0;
+          lessonLinks.forEach((l) => {
+            const text = norm(l.textContent || '');
+            const match = text.includes(q);
+            if (match) lessonMatchesInTopic += 1;
+            if (match) l.removeAttribute('hidden');
+            else l.setAttribute('hidden', '');
+          });
+
+          const topicMatches = topicText.includes(q);
+          if (topicMatches) {
+            lessonLinks.forEach((l) => l.removeAttribute('hidden'));
+            lessonMatchesInTopic = lessonLinks.length;
+          }
+
+          if (topicMatches || lessonMatchesInTopic > 0) {
+            group.removeAttribute('hidden');
+            topicVisible = true;
+            matchedLessons += lessonMatchesInTopic;
+            details.open = true;
+            details.dataset.open = 'true';
+          } else {
+            group.setAttribute('hidden', '');
+          }
+        }
+
+        if (topicVisible) visibleTopics += 1;
+      });
+
+      if (!q) {
+        empty.setAttribute('hidden', '');
+        countEl.textContent = '';
+      } else {
+        if (visibleTopics === 0) {
+          empty.removeAttribute('hidden');
+        } else {
+          empty.setAttribute('hidden', '');
+        }
+        countEl.textContent = matchedLessons === 0
+          ? ''
+          : `${matchedLessons} ${matchedLessons === 1 ? 'resultado' : 'resultados'}`;
+      }
+    };
+
+    input.addEventListener('input', apply);
+  }
+</script>

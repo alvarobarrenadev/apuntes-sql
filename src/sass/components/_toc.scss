@@ -1,0 +1,61 @@
+@use '@abstracts/variables' as v;
+@use '@abstracts/mixins' as m;
+
+
+.toc {
+  width: v.$toc-w;
+  flex-shrink: 0;
+  padding: 1.75rem 0 1.75rem 1.5rem;
+  font-size: 0.8125rem;
+  color: var(--fg-3);
+  position: sticky;
+  top: v.$topbar-h;
+  align-self: flex-start;
+  max-height: calc(100vh - #{v.$topbar-h});
+  overflow-y: auto;
+
+  display: none;
+
+  @include m.breakpoint(desktop) {
+    display: block;
+  }
+}
+
+.toc__title {
+  font-size: 0.6875rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--fg-4);
+  font-weight: 600;
+  margin-bottom: 0.75rem;
+  padding-left: 0.75rem;
+}
+
+.toc__link {
+  display: block;
+  padding: 0.3125rem 0.75rem;
+  color: var(--fg-3);
+  border-left: 2px solid var(--line);
+  text-decoration: none;
+  font-size: 0.78125rem;
+  line-height: 1.5;
+
+  &:hover { color: var(--fg); }
+
+  &.is-active {
+    color: var(--fg);
+    border-left-color: var(--primary);
+    background: linear-gradient(90deg, var(--primary-soft), transparent);
+  }
+
+  &--indent {
+    padding-left: 1.5rem;
+    font-size: 0.75rem;
+  }
+}
+
+.toc__divider {
+  height: 1px;
+  background: var(--line);
+  margin: 1.25rem 0;
+}

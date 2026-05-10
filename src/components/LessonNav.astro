@@ -1,0 +1,37 @@
+---
+import Icon from './Icon.astro';
+import { findLesson, sqlModule } from '../data/sql';
+
+interface Props {
+  prevSlug?: string | null;
+  nextSlug?: string | null;
+}
+
+const { prevSlug, nextSlug } = Astro.props;
+const prev = prevSlug ? findLesson(prevSlug) : null;
+const next = nextSlug ? findLesson(nextSlug) : null;
+
+function hrefFor(slug: string, isProject: boolean) {
+  return isProject ? `/${sqlModule.slug}/${sqlModule.finalProjectSlug}` : `/${sqlModule.slug}/${slug}`;
+}
+---
+
+<nav class="lesson-nav" aria-label="Navegación entre clases">
+  {prev ? (
+    <a class="card lesson-nav__link lesson-nav__link--prev" href={hrefFor(prev.slug, prev.type === 'project')}>
+      <span class="lesson-nav__label"><Icon name="arrow-left" size={11} />Clase anterior</span>
+      <span class="lesson-nav__title">{prev.classNumber} · {prev.title}</span>
+    </a>
+  ) : (
+    <div class="lesson-nav__placeholder">No hay clase anterior — esta es la primera del módulo.</div>
+  )}
+
+  {next ? (
+    <a class="card lesson-nav__link lesson-nav__link--next" href={hrefFor(next.slug, next.type === 'project')}>
+      <span class="lesson-nav__label">Siguiente clase<Icon name="arrow-right" size={11} /></span>
+      <span class="lesson-nav__title">{next.classNumber} · {next.title}</span>
+    </a>
+  ) : (
+    <div class="lesson-nav__placeholder">Esta es la última clase del módulo SQL.</div>
+  )}
+</nav>

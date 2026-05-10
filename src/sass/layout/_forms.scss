@@ -1,0 +1,33 @@
+@use '@abstracts/variables' as v;
+
+
+.field {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+  background: var(--bg-2);
+  border: 1px solid var(--line);
+  border-radius: 9px;
+  padding: 0 0.75rem;
+  height: 38px;
+  color: var(--fg-3);
+  transition: border-color 0.15s ease;
+
+  &:focus-within {
+    border-color: var(--primary-line);
+    background: var(--bg-3);
+  }
+
+  input {
+    flex: 1;
+    background: transparent;
+    border: 0;
+    outline: 0;
+    color: var(--fg);
+    font-size: 0.875rem;
+    font-family: v.$primary-font;
+    min-width: 0;
+
+    &::placeholder { color: var(--fg-3); }
+  }
+}

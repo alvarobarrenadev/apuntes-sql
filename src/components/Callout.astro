@@ -1,0 +1,29 @@
+---
+interface Props {
+  type?: 'note' | 'tip' | 'warn' | 'err';
+  title?: string;
+}
+
+const { type = 'note', title } = Astro.props;
+
+const LABEL: Record<NonNullable<Props['type']>, string> = {
+  note: 'Nota',
+  tip: 'Consejo',
+  warn: 'Advertencia',
+  err: 'Error común',
+};
+const ICO: Record<NonNullable<Props['type']>, string> = {
+  note: 'i',
+  tip: '✓',
+  warn: '!',
+  err: '×',
+};
+---
+
+<aside class={`callout callout--${type}`}>
+  <span class="callout__ico" aria-hidden="true">{ICO[type]}</span>
+  <div class="callout__body">
+    <strong>{title ?? LABEL[type]}</strong>
+    <span><slot /></span>
+  </div>
+</aside>

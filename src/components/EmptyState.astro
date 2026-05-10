@@ -1,0 +1,32 @@
+---
+import Icon from './Icon.astro';
+
+interface Props {
+  title?: string;
+  text?: string;
+  icon?: string;
+  hint?: string;
+  variant?: 'default' | 'compact';
+}
+
+const {
+  title = 'Contenido pendiente',
+  text = 'Pendiente de completar.',
+  icon = 'sparkle',
+  hint,
+  variant = 'default',
+} = Astro.props;
+
+const cls = ['empty', variant === 'compact' ? 'empty--compact' : null].filter(Boolean).join(' ');
+---
+
+<div class={cls} role="status" aria-live="polite">
+  <span class="empty__ico" aria-hidden="true">
+    <Icon name={icon} size={16} />
+  </span>
+  <div class="empty__body">
+    <p class="empty__title">{title}</p>
+    <p class="empty__text">{text}</p>
+    {hint && <span class="empty__hint">{hint}</span>}
+  </div>
+</div>

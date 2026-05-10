@@ -1,0 +1,58 @@
+@use '@abstracts/variables' as v;
+
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  font-size: 0.6875rem;
+  font-weight: 500;
+  padding: 0.1875rem 0.5rem;
+  border-radius: 999px;
+  background: var(--bg-3);
+  color: var(--fg-2);
+  border: 1px solid var(--line);
+  letter-spacing: 0.01em;
+  white-space: nowrap;
+  line-height: 1;
+
+  & > svg { flex-shrink: 0; }
+
+  &--sql      { background: var(--sql-soft);     color: var(--sql);       border-color: var(--sql-line); }
+  &--primary  { background: var(--primary-soft); color: var(--primary-2); border-color: var(--primary-line); }
+  &--warn     { background: var(--warn-soft);    color: var(--warn);      border-color: var(--warn-line); }
+  &--err      { background: var(--err-soft);     color: var(--err);       border-color: var(--err-line); }
+  &--info     { background: var(--info-soft);    color: var(--info);      border-color: var(--info-line); }
+  &--muted    { background: var(--bg-2);         color: var(--fg-3); }
+}
+
+.badge__dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: currentColor;
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  font-family: v.$mono-font;
+  font-size: 0.6875rem;
+  color: var(--fg-2);
+  padding: 0.1875rem 0.4375rem;
+  background: var(--bg-2);
+  border-radius: 5px;
+  border: 1px solid var(--line);
+  white-space: nowrap;
+}
+
+.kbd {
+  font-family: v.$mono-font;
+  font-size: 0.6875rem;
+  background: var(--bg-3);
+  color: var(--fg-2);
+  padding: 1px 6px;
+  border-radius: 5px;
+  border: 1px solid var(--line);
+  border-bottom-width: 2px;
+}

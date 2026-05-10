@@ -1,0 +1,120 @@
+---
+import Icon from './Icon.astro';
+import { topics, sqlModule, topicStatus } from '../data/sql';
+
+interface Props {
+  activeSlug?: string | null;
+}
+
+const { activeSlug = null } = Astro.props;
+
+// Auto-expand the topic that contains the active lesson; collapse the rest.
+const expandedTopicNumbers = new Set<string>();
+if (activeSlug) {
+  for (const t of topics) {
+    if (t.lessons.some((l) => l.slug === activeSlug)) {
+      expandedTopicNumbers.add(t.number);
+    }
+  }
+} else {
+  // Default state on the module overview page: open the first not-completed topic.
+  const firstActive = topics.find((t) => topicStatus(t) !== 'completed');
+  if (firstActive) expandedTopicNumbers.add(firstActive.number);
+  else expandedTopicNumbers.add(topics[0].number);
+}
+---
+
+<aside class="sidebar" id="docs-sidebar" aria-label="Navegación de clases">
+  <div class="side-section">
+    <a class="side-link" href="/"><Icon name="home" size={14} /><span>Temario SQL</span></a>
+    <a class="side-link" href={`/${sqlModule.slug}/${sqlModule.finalProjectSlug}`}><Icon name="trophy" size={14} /><span>Proyecto final</span></a>
+  </div>
+
+  <div class="side-section">
+    <div class="side-title">Temario</div>
+    <div class="side-tree">
+      {topics.map((t) => {
+        const isOpen = expandedTopicNumbers.has(t.number);
+        return (
+          <>
+            <button
+              type="button"
+              class="side-tree__group"
+              aria-expanded={isOpen ? 'true' : 'false'}
+              aria-controls={`topic-${t.number}`}
+              data-side-group={t.number}
+            >
+              <Icon name="chevron-down" size={12} class="side-tree__chevron" />
+              <span class="side-tree__num">{t.number}</span>
+              <span class="side-tree__title">{t.shortTitle}</span>
+            </button>
+            <div class="side-tree__children" id={`topic-${t.number}`} hidden={!isOpen}>
+              {t.lessons.map((l) => {
+                const stateClass =
+                  l.status === 'completed' ? 'is-done'
+                  : l.status === 'in-progress' ? 'is-doing'
+                  : '';
+                const href = l.type === 'project'
+                  ? `/${sqlModule.slug}/${sqlModule.finalProjectSlug}`
+                  : `/${sqlModule.slug}/${l.slug}`;
+                return (
+                  <a
+                    href={href}
+                    class:list={['side-tree__child', stateClass, { active: l.slug === activeSlug }]}
+                  >
+                    <span class:list={['side-check', stateClass]} aria-hidden="true">
+                      {l.status === 'completed' && <Icon name="check" size={9} stroke={2.5} />}
+                    </span>
+                    <span class="side-tree__child-title">{l.title}</span>
+                    {l.type === 'project' && (
+                      <Icon name="trophy" size={12} class="side-tree__final" />
+                    )}
+                  </a>
+                );
+              })}
+            </div>
+          </>
+        );
+      })}
+    </div>
+  </div>
+
+</aside>
+
+<div class="sidebar-overlay" id="docs-sidebar-overlay" aria-hidden="true"></div>
+
+<script>
+  // Sidebar group toggle (collapse / expand topics)
+  document.querySelectorAll<HTMLButtonElement>('[data-side-group]').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const expanded = btn.getAttribute('aria-expanded') === 'true';
+      btn.setAttribute('aria-expanded', expanded ? 'false' : 'true');
+      const id = btn.getAttribute('aria-controls');
+      if (!id) return;
+      const panel = document.getElementById(id);
+      if (panel) panel.hidden = expanded;
+    });
+  });
+
+  // Mobile sidebar open / close
+  const sidebar = document.getElementById('docs-sidebar');
+  const overlay = document.getElementById('docs-sidebar-overlay');
+  const toggle = document.querySelector<HTMLButtonElement>('[data-sidebar-toggle]');
+
+  function setOpen(open: boolean) {
+    if (!sidebar || !overlay) return;
+    sidebar.dataset.open = open ? 'true' : 'false';
+    overlay.dataset.open = open ? 'true' : 'false';
+    overlay.setAttribute('aria-hidden', open ? 'false' : 'true');
+    document.body.style.overflow = open ? 'hidden' : '';
+  }
+
+  toggle?.addEventListener('click', () => {
+    const isOpen = sidebar?.dataset.open === 'true';
+    setOpen(!isOpen);
+  });
+  overlay?.addEventListener('click', () => setOpen(false));
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') setOpen(false);
+  });
+</script>

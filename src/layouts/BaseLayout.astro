@@ -1,0 +1,71 @@
+---
+import '../sass/main.scss';
+import Topbar from '../components/Topbar.astro';
+import SiteFooter from '../components/SiteFooter.astro';
+
+interface Props {
+  title?: string;
+  description?: string;
+  /** When true, the topbar shows a "menu" button on mobile that toggles the docs sidebar. */
+  withSidebarToggle?: boolean;
+  active?: 'apuntes' | 'glosario' | 'snippets';
+  showFooter?: boolean;
+}
+
+const {
+  title = 'Apuntes Conquer Blocks',
+  description = 'Apuntes personales del máster de desarrollo web full stack de Conquer Blocks.',
+  withSidebarToggle = false,
+  active = 'apuntes',
+  showFooter = true,
+} = Astro.props;
+---
+
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content={description} />
+    <meta name="generator" content={Astro.generator} />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" href="/favicon.ico" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <title>{title}</title>
+  </head>
+  <body>
+    <a class="visually-hidden" href="#main-content">Saltar al contenido</a>
+
+    <div class="app">
+      <Topbar active={active} withSidebarToggle={withSidebarToggle} />
+      <main id="main-content" class="app__main">
+        <slot />
+      </main>
+      {showFooter && <SiteFooter />}
+    </div>
+
+    <style is:global>
+      .visually-hidden {
+        position: absolute;
+        width: 1px; height: 1px;
+        padding: 0; margin: -1px;
+        overflow: hidden; clip: rect(0,0,0,0);
+        white-space: nowrap; border: 0;
+      }
+      .visually-hidden:focus-visible {
+        position: fixed;
+        top: 0.5rem; left: 0.5rem;
+        width: auto; height: auto; clip: auto;
+        padding: 0.5rem 0.75rem; margin: 0;
+        background: var(--bg-3); color: var(--fg);
+        border-radius: 8px;
+        z-index: 100;
+      }
+    </style>
+  </body>
+</html>

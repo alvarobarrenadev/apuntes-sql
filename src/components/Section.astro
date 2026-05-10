@@ -1,0 +1,19 @@
+---
+interface Props {
+  id: string;
+  title: string;
+  eyebrow?: string;
+  rule?: boolean;
+}
+
+const { id, title, eyebrow, rule = false } = Astro.props;
+---
+
+<section id={id} class="section" aria-labelledby={`${id}-title`}>
+  <header class="section__head">
+    {eyebrow && <span class="section__eyebrow">§ {eyebrow}</span>}
+    <h2 id={`${id}-title`} class="h2 section__title">{title}</h2>
+    {rule && <span class="section__rule" aria-hidden="true" />}
+  </header>
+  <slot />
+</section>

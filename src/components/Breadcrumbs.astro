@@ -1,0 +1,32 @@
+---
+import Icon from './Icon.astro';
+
+interface Crumb {
+  label: string;
+  href?: string;
+}
+
+interface Props {
+  items: Crumb[];
+}
+
+const { items } = Astro.props;
+---
+
+<nav class="breadcrumbs" aria-label="Migas de pan">
+  {items.map((c, i) => {
+    const isLast = i === items.length - 1;
+    return (
+      <>
+        {c.href && !isLast
+          ? <a href={c.href}>{c.label}</a>
+          : <span class:list={{ breadcrumbs__current: isLast }}>{c.label}</span>}
+        {!isLast && (
+          <span class="breadcrumbs__sep" aria-hidden="true">
+            <Icon name="chevron-right" size={11} />
+          </span>
+        )}
+      </>
+    );
+  })}
+</nav>

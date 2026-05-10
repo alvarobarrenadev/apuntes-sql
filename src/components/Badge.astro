@@ -1,0 +1,17 @@
+---
+interface Props {
+  variant?: 'default' | 'sql' | 'primary' | 'warn' | 'err' | 'info' | 'muted';
+  dot?: boolean;
+  class?: string;
+}
+
+const { variant = 'default', dot = false, class: className } = Astro.props;
+const cls = ['badge', variant !== 'default' ? `badge--${variant}` : null, className]
+  .filter(Boolean)
+  .join(' ');
+---
+
+<span class={cls}>
+  {dot && <span class="badge__dot" aria-hidden="true" />}
+  <slot />
+</span>

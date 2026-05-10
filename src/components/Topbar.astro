@@ -1,0 +1,35 @@
+---
+import Icon from './Icon.astro';
+
+interface Props {
+  active?: 'apuntes' | 'glosario' | 'snippets';
+  /** When true, render a "menu" button (mobile) that toggles the sidebar via `data-sidebar-toggle`. */
+  withSidebarToggle?: boolean;
+}
+
+const { active = 'apuntes', withSidebarToggle = false } = Astro.props;
+---
+
+<header class="topbar">
+  <a class="brand" href="/" aria-label="Apuntes SQL · Inicio">
+    <span class="brand-mark" aria-hidden="true">SQL</span>
+    <span class="brand-name">Apuntes SQL</span>
+    <span class="brand-sub">Conquer Blocks</span>
+  </a>
+
+  <nav class="topbar-nav" aria-label="Secciones">
+    <a href="/" class:list={[{ active: active === 'apuntes' }]}>Temario</a>
+    <a href="/sql/proyecto-final">Proyecto final</a>
+  </nav>
+
+  {withSidebarToggle && (
+    <button
+      type="button"
+      class="topbar__menu-btn"
+      aria-label="Abrir menú lateral"
+      data-sidebar-toggle
+    >
+      <Icon name="menu" size={18} />
+    </button>
+  )}
+</header>

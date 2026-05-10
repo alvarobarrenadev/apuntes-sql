@@ -1,0 +1,17 @@
+// ---------- Breakpoints ----------
+$bp-mobile: 30rem;            // 480px
+$bp-tablet: 48rem;            // 768px
+$bp-tablet-horizontal: 64rem; // 1024px
+$bp-desktop: 75rem;           // 1200px
+$bp-desktop-xl: 90rem;        // 1440px
+
+// ---------- Fonts ----------
+$primary-font: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+$mono-font: 'JetBrains Mono', ui-monospace, SFMono-Regular, 'Cascadia Code', Menlo, monospace;
+
+// ---------- Layout sizes ----------
+$topbar-h: 56px;
+$sidebar-w: 280px;
+$toc-w: 220px;
+$content-max: 1080px;
+$class-max: 1100px;

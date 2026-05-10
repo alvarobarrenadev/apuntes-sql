@@ -1,0 +1,21 @@
+---
+interface Props {
+  level: 1 | 2 | 3 | 4;
+  label?: boolean;
+}
+
+const { level, label = false } = Astro.props;
+const final = level === 4;
+const labels = ['Fácil', 'Intermedio', 'Avanzado', 'Experto'];
+---
+
+<span class="difficulty" aria-label={`Dificultad: ${labels[level - 1]}`}>
+  {[1, 2, 3, 4].map((i) => (
+    <span class:list={[
+      'difficulty__bar',
+      i <= level ? 'is-on' : null,
+      i <= level && final ? 'is-on--final' : null,
+    ]} aria-hidden="true" />
+  ))}
+  {label && <span class="muted" style="font-size: 0.75rem; margin-left: 0.375rem;">{labels[level - 1]}</span>}
+</span>

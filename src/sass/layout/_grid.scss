@@ -1,0 +1,75 @@
+@use '@abstracts/variables' as v;
+@use '@abstracts/mixins' as m;
+
+
+.app {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background:
+    radial-gradient(1200px 600px at 80% -10%, rgba(124, 123, 255, 0.08), transparent 60%),
+    radial-gradient(900px 500px at -10% 110%, rgba(94, 234, 160, 0.05), transparent 60%),
+    var(--bg);
+  color: var(--fg);
+  isolation: isolate;
+  position: relative;
+}
+
+.app__main {
+  flex: 1;
+  display: flex;
+  min-height: 0;
+}
+
+.docs {
+  display: flex;
+  flex: 1;
+  min-height: 0;
+}
+
+.docs__main {
+  flex: 1;
+  min-width: 0;
+  overflow-y: auto;
+}
+
+.docs__inner {
+  max-width: v.$class-max;
+  margin: 0 auto;
+  padding: 1.75rem 1.25rem 4rem;
+
+  @include m.breakpoint(tablet) {
+    padding: 2rem 2rem 5rem;
+  }
+
+  @include m.breakpoint(desktop) {
+    padding: 1.75rem 3.5rem 5rem;
+  }
+}
+
+// Two-column docs layout (article + TOC)
+.docs__layout {
+  display: flex;
+  gap: 2.5rem;
+  align-items: flex-start;
+}
+
+.docs__article {
+  flex: 1;
+  min-width: 0;
+}
+
+// Container for non-docs pages
+.container {
+  max-width: v.$content-max;
+  margin: 0 auto;
+  padding: 0 1.25rem;
+
+  @include m.breakpoint(tablet) {
+    padding: 0 2.25rem;
+  }
+
+  @include m.breakpoint(desktop) {
+    padding: 0 3.75rem;
+  }
+}

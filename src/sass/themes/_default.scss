@@ -1,0 +1,66 @@
+:root {
+  // ---------- Surface ----------
+  --bg: #0a0b12;
+  --bg-1: #0d0f17;
+  --bg-2: #11141d;
+  --bg-3: #161a25;
+  --bg-elev: #1a1e2a;
+  --bg-deep: #060710;
+
+  // ---------- Borders ----------
+  --line: rgba(255, 255, 255, 0.07);
+  --line-2: rgba(255, 255, 255, 0.12);
+  --line-strong: rgba(255, 255, 255, 0.18);
+
+  // ---------- Foreground ----------
+  --fg: #e8eaf2;
+  --fg-2: #b6bccd;
+  --fg-3: #7a8295;
+  --fg-4: #525a6e;
+
+  // ---------- Brand / accent ----------
+  --primary: #7c7bff;
+  --primary-2: #9b8cff;
+  --primary-soft: rgba(124, 123, 255, 0.14);
+  --primary-line: rgba(124, 123, 255, 0.35);
+
+  // ---------- SQL accent (mint) ----------
+  --sql: #5eeaa0;
+  --sql-soft: rgba(94, 234, 160, 0.12);
+  --sql-line: rgba(94, 234, 160, 0.32);
+
+  // ---------- Status ----------
+  --warn: #ffd166;
+  --warn-soft: rgba(255, 209, 102, 0.12);
+  --warn-line: rgba(255, 209, 102, 0.32);
+
+  --err: #ff7a8a;
+  --err-soft: rgba(255, 122, 138, 0.12);
+  --err-line: rgba(255, 122, 138, 0.32);
+
+  --info: #6cc5ff;
+  --info-soft: rgba(108, 197, 255, 0.10);
+  --info-line: rgba(108, 197, 255, 0.30);
+
+  // ---------- Module palette (per discipline) ----------
+  --mod-html: #ff8a5b;
+  --mod-css: #6cc5ff;
+  --mod-js: #ffd166;
+  --mod-react: #61dafb;
+  --mod-backend: #b48cff;
+  --mod-api: #5eeaa0;
+  --mod-git: #ff7a8a;
+  --mod-sec: #ff5fa2;
+
+  // ---------- Radii ----------
+  --radius-xs: 6px;
+  --radius-sm: 8px;
+  --radius: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 22px;
+
+  // ---------- Shadows ----------
+  --shadow-1: 0 1px 0 rgba(255,255,255,0.04) inset, 0 0 0 1px rgba(255,255,255,0.04);
+  --shadow-2: 0 12px 40px -12px rgba(0,0,0,0.8), 0 0 0 1px var(--line);
+  --shadow-glow: 0 6px 18px -6px rgba(124,123,255,0.7);
+}

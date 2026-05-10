@@ -1,0 +1,74 @@
+---
+import Icon from './Icon.astro';
+
+interface Props {
+  lang?: string;
+  filename?: string | null;
+  code?: string | null;
+  empty?: boolean;
+  emptyText?: string;
+  showLineNumbers?: boolean;
+}
+
+const {
+  lang = 'sql',
+  filename = null,
+  code = null,
+  empty,
+  emptyText = 'Bloque de código pendiente. Se añadirá cuando se importe el código real de la clase.',
+  showLineNumbers = true,
+} = Astro.props;
+
+const isEmpty = empty ?? !code;
+const lineCount = code ? code.split('\n').length : 0;
+---
+
+<div class="code">
+  <div class="code__head">
+    <span class="code__lang">{lang.toUpperCase()}</span>
+    {filename && <span class="code__file">{filename}</span>}
+    <div class="code__actions">
+      <button
+        type="button"
+        class="code__copy"
+        disabled={isEmpty}
+        aria-label="Copiar al portapapeles"
+        data-copy-code={!isEmpty ? '' : null}
+      >
+        <Icon name="copy" size={11} />
+        Copiar
+      </button>
+    </div>
+  </div>
+
+  {isEmpty ? (
+    <p class="code__empty">{emptyText}</p>
+  ) : (
+    <div class="code__body">
+      {showLineNumbers && (
+        <div class="code__gutter" aria-hidden="true">
+          {Array.from({ length: lineCount }, (_, i) => <span>{i + 1}</span>)}
+        </div>
+      )}
+      <pre class="code__pre"><code>{code}</code></pre>
+    </div>
+  )}
+</div>
+
+<script>
+  document.querySelectorAll<HTMLButtonElement>('[data-copy-code]').forEach((btn) => {
+    btn.addEventListener('click', async () => {
+      const wrap = btn.closest('.code');
+      const pre = wrap?.querySelector('pre');
+      if (!pre) return;
+      try {
+        await navigator.clipboard.writeText(pre.textContent ?? '');
+        const original = btn.innerHTML;
+        btn.textContent = '¡Copiado!';
+        setTimeout(() => { btn.innerHTML = original; }, 1500);
+      } catch {
+        /* noop */
+      }
+    });
+  });
+</script>

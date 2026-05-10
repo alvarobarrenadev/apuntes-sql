@@ -1,0 +1,66 @@
+@use '@abstracts/variables' as v;
+
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.5rem 0.875rem;
+  border-radius: 9px;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  font-family: v.$primary-font;
+  border: 1px solid var(--line-2);
+  background: var(--bg-3);
+  color: var(--fg);
+  text-decoration: none;
+  transition: background 0.15s ease, border-color 0.15s ease, transform 0.05s ease;
+
+  &:hover { background: var(--bg-elev); }
+  &:active { transform: translateY(1px); }
+  &:disabled,
+  &[aria-disabled='true'] {
+    opacity: 0.55;
+    cursor: not-allowed;
+  }
+
+  & > svg { flex-shrink: 0; }
+}
+
+.btn--primary {
+  background: linear-gradient(180deg, #8b8aff, #6968ee);
+  border-color: rgba(255, 255, 255, 0.18);
+  color: #ffffff;
+  box-shadow:
+    0 6px 18px -6px rgba(124, 123, 255, 0.7),
+    inset 0 1px 0 rgba(255, 255, 255, 0.25);
+
+  &:hover { background: linear-gradient(180deg, #9897ff, #7574f0); }
+}
+
+.btn--ghost {
+  background: transparent;
+  border-color: var(--line);
+
+  &:hover { background: var(--bg-2); }
+}
+
+.btn--success {
+  background: linear-gradient(180deg, #6ff0aa, #3dd87f);
+  color: #04230f;
+  border-color: rgba(255, 255, 255, 0.2);
+  box-shadow:
+    0 6px 18px -6px rgba(94, 234, 160, 0.6),
+    inset 0 1px 0 rgba(255, 255, 255, 0.25);
+}
+
+.btn--sm {
+  padding: 0.3125rem 0.625rem;
+  font-size: 0.75rem;
+  border-radius: 7px;
+}
+
+.btn--block {
+  width: 100%;
+}

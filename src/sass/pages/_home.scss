@@ -1,0 +1,233 @@
+@use '@abstracts/variables' as v;
+@use '@abstracts/mixins' as m;
+
+
+.sql-index {
+  padding-top: 1.5rem;
+  padding-bottom: 3rem;
+}
+
+// ----- Compact hero ---------------------------------------------------------
+.sql-hero {
+  border: 1px solid var(--sql-line);
+  border-radius: 14px;
+  padding: 1.25rem 1.25rem 1.125rem;
+  background:
+    radial-gradient(circle at 100% -40%, rgba(94, 234, 160, 0.14), transparent 55%),
+    linear-gradient(180deg, rgba(94, 234, 160, 0.05), rgba(255, 255, 255, 0.01));
+  margin-bottom: 1.25rem;
+
+  @include m.breakpoint(tablet) {
+    padding: 1.5rem 1.5rem 1.375rem;
+  }
+}
+
+.sql-hero__eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4375rem;
+  color: var(--sql);
+  font-size: 0.6875rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-weight: 600;
+  margin: 0 0 0.5rem;
+}
+
+.sql-hero__title {
+  font-size: clamp(1.5rem, 1.1rem + 1.6vw, 1.875rem);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+  margin: 0 0 0.5rem;
+  color: var(--fg);
+}
+
+.sql-hero__lead {
+  margin: 0;
+  color: var(--fg-2);
+  font-size: 0.9375rem;
+  line-height: 1.55;
+  max-width: 48rem;
+}
+
+.sql-hero__stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1.25rem;
+  margin-top: 1rem;
+  font-size: 0.8125rem;
+  color: var(--fg-3);
+
+  & > span {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4375rem;
+  }
+
+  strong {
+    color: var(--fg);
+    font-weight: 600;
+  }
+}
+
+.sql-hero__pending {
+  color: var(--fg-3);
+  font-style: italic;
+}
+
+// ----- Toolbar (search + progress) ------------------------------------------
+.sql-toolbar {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+
+  @include m.breakpoint(tablethorizontal) {
+    grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
+    align-items: stretch;
+  }
+}
+
+.sql-search {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+  padding: 0.625rem 0.875rem;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: var(--bg-2);
+  transition: border-color 0.15s ease;
+
+  &:focus-within {
+    border-color: var(--sql-line);
+  }
+
+  input {
+    flex: 1;
+    background: transparent;
+    border: 0;
+    outline: 0;
+    color: var(--fg);
+    font-size: 0.9375rem;
+    font-family: v.$primary-font;
+    min-width: 0;
+
+    &::placeholder { color: var(--fg-3); }
+  }
+}
+
+.sql-search__count {
+  font-size: 0.75rem;
+  color: var(--fg-3);
+  white-space: nowrap;
+}
+
+.sql-progress {
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: var(--bg-2);
+  padding: 0.75rem 0.875rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  justify-content: center;
+}
+
+.sql-progress__head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: var(--fg);
+}
+
+// ----- Syllabus -------------------------------------------------------------
+.sql-syllabus__head {
+  display: flex;
+  align-items: baseline;
+  gap: 0.875rem;
+  margin-bottom: 0.875rem;
+
+  .h2 {
+    margin: 0;
+    font-size: 1.0625rem;
+    font-weight: 600;
+  }
+}
+
+.sql-syllabus__empty {
+  margin: 1.25rem 0 0;
+  padding: 1rem;
+  border: 1px dashed var(--line);
+  border-radius: 10px;
+  text-align: center;
+  color: var(--fg-3);
+  font-size: 0.875rem;
+}
+
+// Hide [hidden] explicitly (lesson rows + topic groups)
+.lesson-row[hidden],
+.sql-syllabus [hidden] {
+  display: none !important;
+}
+
+// ----- Final project access -------------------------------------------------
+.sql-final-access {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 1.5rem;
+  padding: 1rem 1.125rem;
+  border: 1px solid var(--warn-line, var(--line));
+  border-radius: 12px;
+  background: linear-gradient(180deg, rgba(255, 192, 100, 0.06), rgba(255, 255, 255, 0.01));
+  text-decoration: none;
+  color: inherit;
+  transition: border-color 0.15s ease, transform 0.15s ease;
+
+  &:hover {
+    border-color: var(--warn, var(--line-2));
+    transform: translateY(-1px);
+  }
+}
+
+.sql-final-access__icon {
+  width: 42px;
+  height: 42px;
+  border-radius: 10px;
+  background: rgba(255, 192, 100, 0.12);
+  border: 1px solid var(--warn-line, var(--line));
+  color: var(--warn, var(--fg));
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+}
+
+.sql-final-access__body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.125rem;
+  min-width: 0;
+}
+
+.sql-final-access__eyebrow {
+  font-size: 0.6875rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--warn, var(--fg-3));
+  font-weight: 600;
+}
+
+.sql-final-access__title {
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: var(--fg);
+}
+
+.sql-final-access__sub {
+  font-size: 0.8125rem;
+  color: var(--fg-3);
+}

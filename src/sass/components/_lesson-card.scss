@@ -1,0 +1,200 @@
+@use '@abstracts/variables' as v;
+@use '@abstracts/mixins' as m;
+
+
+.topic-row {
+  padding: 0;
+  overflow: hidden;
+  transition: border-color 0.15s ease;
+
+  &.is-doing {
+    border-color: var(--primary-line);
+    background: linear-gradient(180deg, var(--primary-soft), rgba(255, 255, 255, 0.01));
+  }
+
+  // Hide native <details> marker; we render our own chevron.
+  & > summary {
+    list-style: none;
+    cursor: pointer;
+    &::-webkit-details-marker { display: none; }
+    &::marker { content: ''; }
+  }
+}
+
+.topic-row__head {
+  display: flex;
+  align-items: center;
+  gap: 1.125rem;
+  padding: 1.125rem 1.25rem;
+
+  @include m.breakpoint-down(tablet) {
+    gap: 0.75rem;
+    padding: 1rem;
+    flex-wrap: wrap;
+  }
+}
+
+.topic-row__num {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  background: var(--bg-2);
+  color: var(--fg-3);
+  border: 1px solid var(--line);
+  display: grid;
+  place-items: center;
+  font-family: v.$mono-font;
+  font-size: 0.875rem;
+  font-weight: 600;
+  flex-shrink: 0;
+
+  &.is-done   { background: var(--sql-soft);     color: var(--sql);       border-color: var(--sql-line); }
+  &.is-doing  { background: var(--primary-soft); color: var(--primary-2); border-color: var(--primary-line); }
+  &.is-final  { background: var(--warn-soft);    color: var(--warn);      border-color: var(--warn-line); }
+}
+
+.topic-row__body {
+  flex: 1;
+  min-width: 0;
+}
+
+.topic-row__title {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+  margin-bottom: 0.25rem;
+  font-size: 0.90625rem;
+  font-weight: 600;
+  color: var(--fg);
+  flex-wrap: wrap;
+}
+
+.topic-row__desc {
+  font-size: 0.78125rem;
+  color: var(--fg-3);
+  line-height: 1.5;
+  max-width: 35rem;
+}
+
+.topic-row__meta {
+  display: flex;
+  align-items: center;
+  gap: 0.875rem;
+  color: var(--fg-3);
+  font-size: 0.78125rem;
+  flex-shrink: 0;
+  flex-wrap: wrap;
+
+  & > span,
+  & > .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3125rem;
+  }
+
+  @include m.breakpoint-down(tablet) {
+    width: 100%;
+    margin-top: 0.5rem;
+    padding-left: 52px;
+  }
+}
+
+.topic-row__chevron {
+  width: 14px;
+  height: 14px;
+  color: var(--fg-4);
+  transition: transform 0.15s ease;
+
+  .topic-row[data-open='true'] & { transform: rotate(0deg); }
+  .topic-row[data-open='false'] & { transform: rotate(-90deg); }
+}
+
+.topic-row__children {
+  border-top: 1px solid var(--line);
+  padding: 0.625rem 1.25rem 0.875rem;
+  background: rgba(0, 0, 0, 0.18);
+
+  @include m.breakpoint(tablet) {
+    padding-left: 4.875rem;
+  }
+
+  &[hidden] { display: none; }
+}
+
+.lesson-row {
+  display: flex;
+  align-items: center;
+  gap: 0.875rem;
+  padding: 0.625rem 0.75rem;
+  border-radius: 8px;
+  text-decoration: none;
+  color: var(--fg);
+  background: transparent;
+  border: 1px solid transparent;
+  cursor: pointer;
+  margin-top: 2px;
+  flex-wrap: wrap;
+
+  &:first-child { margin-top: 0.375rem; }
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.025);
+  }
+
+  &.is-doing {
+    background: var(--primary-soft);
+    border-color: var(--primary-line);
+  }
+
+  &.is-done .lesson-row__title {
+    color: var(--fg-3);
+  }
+}
+
+.lesson-row__id {
+  font-family: v.$mono-font;
+  font-size: 0.6875rem;
+  color: var(--fg-3);
+  min-width: 36px;
+}
+
+.lesson-row__title {
+  flex: 1;
+  font-size: 0.84375rem;
+  color: var(--fg);
+  min-width: 0;
+}
+
+.lesson-row__time {
+  color: var(--fg-3);
+  font-size: 0.75rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  min-width: 56px;
+  justify-content: flex-end;
+}
+
+.lesson-row__arrow {
+  color: var(--fg-4);
+  flex-shrink: 0;
+}
+
+// ================================================================
+//  Difficulty indicator
+// ================================================================
+.difficulty {
+  display: inline-flex;
+  gap: 2px;
+  align-items: center;
+}
+
+.difficulty__bar {
+  width: 10px;
+  height: 3px;
+  border-radius: 2px;
+  background: var(--bg-3);
+
+  &.is-on { background: var(--fg-2); }
+  &.is-on--final { background: var(--warn); }
+}

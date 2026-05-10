@@ -1,0 +1,24 @@
+.breadcrumbs {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.8125rem;
+  color: var(--fg-3);
+  flex-wrap: wrap;
+
+  a {
+    color: inherit;
+    text-decoration: none;
+
+    &:hover { color: var(--fg); }
+  }
+
+  .breadcrumbs__current {
+    color: var(--fg);
+  }
+
+  .breadcrumbs__sep {
+    color: var(--fg-4);
+    display: inline-flex;
+  }
+}

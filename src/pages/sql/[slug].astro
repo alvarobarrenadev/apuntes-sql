@@ -1,0 +1,151 @@
+---
+import DocsLayout from '../../layouts/DocsLayout.astro';
+import Icon from '../../components/Icon.astro';
+import Badge from '../../components/Badge.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import Section from '../../components/Section.astro';
+import EmptyState from '../../components/EmptyState.astro';
+import CodeBlock from '../../components/CodeBlock.astro';
+import LessonNav from '../../components/LessonNav.astro';
+import CompleteButton from '../../components/CompleteButton.astro';
+import { lessons } from '../../data/sql';
+
+export function getStaticPaths() {
+  // The final project has its own dedicated route — exclude it here.
+  return lessons
+    .filter((l) => l.type !== 'project')
+    .map((l) => ({ params: { slug: l.slug }, props: { lesson: l } }));
+}
+
+const { lesson } = Astro.props;
+
+const TYPE_META = {
+  theory:   { label: 'Teoría',      variant: 'info' as const,    icon: 'book' },
+  exercise: { label: 'Ejercicios',  variant: 'primary' as const, icon: 'code' },
+  setup:    { label: 'Instalación', variant: 'sql' as const,     icon: 'database' },
+  project:  { label: 'Proyecto',    variant: 'warn' as const,    icon: 'trophy' },
+};
+const t = TYPE_META[lesson.type];
+
+const STATUS_BADGE = {
+  pending:       { label: 'Pendiente',     variant: 'muted' as const,   dot: false },
+  'in-progress': { label: 'En curso',      variant: 'primary' as const, dot: true },
+  completed:     { label: 'Completada',    variant: 'sql' as const,     dot: false },
+};
+const status = STATUS_BADGE[lesson.status];
+
+const sections = [
+  { id: 'resumen',     n: '01', title: 'Resumen rápido',          empty: 'Resumen pendiente.' },
+  { id: 'conceptos',   n: '02', title: 'Conceptos clave',          empty: 'Conceptos clave pendientes.' },
+  { id: 'contenido',   n: '03', title: 'Contenido de la clase',    empty: 'Pendiente de completar.' },
+  { id: 'codigo',      n: '04', title: 'Código y ejemplos',        empty: 'Código pendiente.' },
+  { id: 'errores',     n: '05', title: 'Errores comunes',          empty: 'Sección pendiente.' },
+  { id: 'practicas',   n: '06', title: 'Buenas prácticas',         empty: 'Sección pendiente.' },
+  { id: 'ejercicios',  n: '07', title: 'Ejercicios',               empty: 'Ejercicios pendientes.' },
+  { id: 'checklist',   n: '08', title: 'Checklist final',          empty: 'Checklist pendiente.' },
+  { id: 'recursos',    n: '09', title: 'Recursos relacionados',    empty: 'Recursos pendientes.' },
+];
+---
+
+<DocsLayout title={`${lesson.classNumber} · ${lesson.title} — Apuntes SQL`} activeSlug={lesson.slug}>
+  <div class="docs__inner docs__layout">
+    <article class="docs__article">
+      <Breadcrumbs items={[
+        { label: 'Apuntes SQL', href: '/' },
+        { label: `Tema ${lesson.topicNumber} · ${lesson.topic}`, href: `/#tema-${lesson.topicNumber}` },
+        { label: `Clase ${lesson.classNumber}` },
+      ]} />
+
+      <div class="class-meta" style="margin-top: 1rem;">
+        <Badge variant={status.variant} dot={status.dot}>{status.label}</Badge>
+        <Badge variant={t.variant}><Icon name={t.icon} size={10} />{t.label}</Badge>
+        <span class="chip">Clase {lesson.classNumber}</span>
+        <span class="chip">Tema {lesson.topicNumber}</span>
+        <span class="class-time">
+          <Icon name="clock" size={12} /> {lesson.estimatedTime}
+        </span>
+      </div>
+
+      <h1 class="class-title">{lesson.title}</h1>
+
+      {lesson.summary
+        ? <p class="class-lead">{lesson.summary}</p>
+        : <p class="class-lead muted">
+            <em>Apuntes pendientes de añadir.</em>
+          </p>}
+
+      {lesson.tags.length > 0 && (
+        <div class="class-tags">
+          {lesson.tags.map((tag) => <span class="chip">#{tag}</span>)}
+        </div>
+      )}
+
+      {/* Sections — all empty states until the transcripts arrive */}
+      {sections.map((s) => (
+        <Section id={s.id} title={s.title} eyebrow={s.n}>
+          {s.id === 'codigo' ? (
+            <CodeBlock empty />
+          ) : s.id === 'conceptos' ? (
+            <div class="concepts-grid">
+              {[1, 2, 3, 4].map(() => (
+                <div class="card concept-card">
+                  <div class="concept-card__fn">— pendiente —</div>
+                  <p class="concept-card__desc muted">
+                    Concepto pendiente de añadir.
+                  </p>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <EmptyState title={s.empty} />
+          )}
+        </Section>
+      ))}
+
+      <LessonNav prevSlug={lesson.previousSlug} nextSlug={lesson.nextSlug} />
+
+      <div style="margin-top: 1.25rem;">
+        <CompleteButton slug={lesson.slug} />
+      </div>
+    </article>
+
+    <!-- TOC -->
+    <aside class="toc" aria-label="Índice de la clase">
+      <p class="toc__title">En esta clase</p>
+      {sections.map((s) => (
+        <a class="toc__link" href={`#${s.id}`}>{s.title}</a>
+      ))}
+      <div class="toc__divider" aria-hidden="true" />
+      <p class="toc__title">Acciones</p>
+      <a class="side-link" href="#" aria-disabled="true"><Icon name="bookmark" size={13} />Guardar</a>
+      <a class="side-link" href="#" aria-disabled="true"><Icon name="share" size={13} />Compartir</a>
+    </aside>
+  </div>
+</DocsLayout>
+
+<script>
+  // TOC scroll spy
+  const sections = Array.from(document.querySelectorAll<HTMLElement>('article.docs__article section.section'));
+  const links = new Map<string, HTMLAnchorElement>();
+  document.querySelectorAll<HTMLAnchorElement>('.toc .toc__link').forEach((a) => {
+    const id = a.getAttribute('href')?.slice(1);
+    if (id) links.set(id, a);
+  });
+
+  if (sections.length && links.size) {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          const link = links.get(entry.target.id);
+          if (!link) return;
+          if (entry.isIntersecting) {
+            links.forEach((l) => l.classList.remove('is-active'));
+            link.classList.add('is-active');
+          }
+        });
+      },
+      { rootMargin: '-30% 0px -55% 0px', threshold: 0 },
+    );
+    sections.forEach((s) => observer.observe(s));
+  }
+</script>

@@ -1,0 +1,44 @@
+---
+import Icon from './Icon.astro';
+import Badge from './Badge.astro';
+import Difficulty from './Difficulty.astro';
+import type { Lesson } from '../data/sql';
+import { sqlModule } from '../data/sql';
+
+interface Props {
+  lesson: Lesson;
+}
+
+const { lesson } = Astro.props;
+
+const TYPE_LABEL: Record<Lesson['type'], { label: string; variant: 'info' | 'primary' | 'warn' | 'sql'; icon: string }> = {
+  theory:   { label: 'Teoría',         variant: 'info',    icon: 'book' },
+  exercise: { label: 'Ejercicios',     variant: 'primary', icon: 'code' },
+  setup:    { label: 'Instalación',    variant: 'sql',     icon: 'database' },
+  project:  { label: 'Proyecto final', variant: 'warn',    icon: 'trophy' },
+};
+const t = TYPE_LABEL[lesson.type];
+
+const stateClass =
+  lesson.status === 'completed' ? 'is-done'
+  : lesson.status === 'in-progress' ? 'is-doing'
+  : '';
+
+const href = lesson.type === 'project'
+  ? `/${sqlModule.slug}/${sqlModule.finalProjectSlug}`
+  : `/${sqlModule.slug}/${lesson.slug}`;
+---
+
+<a class:list={['lesson-row', stateClass]} href={href}>
+  <span class="lesson-row__id">{lesson.classNumber}</span>
+  <span class="lesson-row__title">{lesson.title}</span>
+  <Badge variant={t.variant}>
+    <Icon name={t.icon} size={10} />
+    {t.label}
+  </Badge>
+  <Difficulty level={lesson.difficulty} />
+  <span class="lesson-row__time">
+    <Icon name="clock" size={11} /> {lesson.estimatedTime}
+  </span>
+  <Icon name="arrow-right" size={13} class="lesson-row__arrow" />
+</a>
