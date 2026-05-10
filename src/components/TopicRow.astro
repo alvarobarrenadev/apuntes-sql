@@ -41,9 +41,8 @@ const isFinal = topic.hasFinalProject;
 
     <div class="topic-row__meta">
       <span><Icon name="book" size={13} /> {topic.classCount} {topic.classCount === 1 ? 'clase' : 'clases'}</span>
-      <span><Icon name="clock" size={13} /> {topic.estimatedTime}</span>
 
-      {status === 'completed' && <Badge variant="sql"><Icon name="check" size={9} stroke={2.5} />Hecho</Badge>}
+{status === 'completed' && <Badge variant="sql"><Icon name="check" size={9} stroke={2.5} />Hecho</Badge>}
       {status === 'in-progress' && <Badge variant="primary" dot>En curso</Badge>}
       {status === 'pending' && <Badge variant="muted">Pendiente</Badge>}
 
