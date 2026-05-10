@@ -208,11 +208,6 @@ const hasContent = lesson.contenido.length > 0;
           : <EmptyState title="Pendiente de completar." />}
       </Section>
 
-      {/* 09 — RECURSOS */}
-      <Section id="recursos" title="Recursos relacionados" eyebrow="09">
-        <EmptyState title="Pendiente de completar." />
-      </Section>
-
       <LessonNav prevSlug={lesson.previousSlug} nextSlug={lesson.nextSlug} />
 
       <div style="margin-top: 1.25rem;">
@@ -231,7 +226,6 @@ const hasContent = lesson.contenido.length > 0;
       <a class="toc__link" href="#practicas">Buenas prácticas</a>
       <a class="toc__link" href="#ejercicios">Ejercicios</a>
       <a class="toc__link" href="#checklist">Checklist</a>
-      <a class="toc__link" href="#recursos">Recursos</a>
     </aside>
   </div>
 </DocsLayout>
