@@ -31,7 +31,7 @@ const sassAliasImporter = {
 // https://astro.build/config
 export default defineConfig({
   site: 'https://alvarobarrenadev.github.io',
-  base: '/apuntes-sql',
+  base: process.env.NODE_ENV === 'production' ? '/apuntes-sql' : '/',
   vite: {
     css: {
       preprocessorOptions: {
