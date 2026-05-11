@@ -4,8 +4,7 @@ import Icon from '../components/Icon.astro';
 import Badge from '../components/Badge.astro';
 import TopicRow from '../components/TopicRow.astro';
 import ProgressBar from '../components/ProgressBar.astro';
-import { sqlModule, topics, lessons } from '../data/sql';
-import { withBase } from '../utils/paths';
+import { topics, lessons } from '../data/sql';
 
 const completed = lessons.filter((l) => l.status === 'completed').length;
 ---
@@ -72,21 +71,6 @@ const completed = lessons.filter((l) => l.status === 'completed').length;
         No se han encontrado clases ni temas que coincidan con la búsqueda.
       </p>
     </section>
-
-    <!-- Final project access -->
-    <a class="sql-final-access" href={withBase(`/proyecto-final`)}>
-      <span class="sql-final-access__icon" aria-hidden="true">
-        <Icon name="trophy" size={22} />
-      </span>
-      <span class="sql-final-access__body">
-        <span class="sql-final-access__eyebrow">Proyecto final</span>
-        <span class="sql-final-access__title">Sistema de Gestión de Biblioteca</span>
-        <span class="sql-final-access__sub">
-          Cierre del módulo SQL · Diseño normalizado, JOINs, subconsultas e índices desde cero.
-        </span>
-      </span>
-      <Icon name="arrow-right" size={16} />
-    </a>
   </div>
 </DocsLayout>
 
