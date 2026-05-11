@@ -8,7 +8,6 @@ interface Props {
   description?: string;
   /** When true, the topbar shows a "menu" button on mobile that toggles the docs sidebar. */
   withSidebarToggle?: boolean;
-  active?: 'apuntes' | 'glosario' | 'snippets';
   showFooter?: boolean;
 }
 
@@ -16,7 +15,6 @@ const {
   title = 'Apuntes Conquer Blocks',
   description = 'Apuntes personales del máster de desarrollo web full stack de Conquer Blocks.',
   withSidebarToggle = false,
-  active = 'apuntes',
   showFooter = true,
 } = Astro.props;
 ---
@@ -42,7 +40,7 @@ const {
     <a class="visually-hidden" href="#main-content">Saltar al contenido</a>
 
     <div class="app">
-      <Topbar active={active} withSidebarToggle={withSidebarToggle} />
+      <Topbar withSidebarToggle={withSidebarToggle} />
       <main id="main-content" class="app__main">
         <slot />
       </main>

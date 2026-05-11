@@ -2,12 +2,11 @@
 import Icon from './Icon.astro';
 
 interface Props {
-  active?: 'apuntes' | 'glosario' | 'snippets';
   /** When true, render a "menu" button (mobile) that toggles the sidebar via `data-sidebar-toggle`. */
   withSidebarToggle?: boolean;
 }
 
-const { active = 'apuntes', withSidebarToggle = false } = Astro.props;
+const { withSidebarToggle = false } = Astro.props;
 ---
 
 <header class="topbar">
@@ -16,11 +15,6 @@ const { active = 'apuntes', withSidebarToggle = false } = Astro.props;
     <span class="brand-name">Apuntes SQL</span>
     <span class="brand-sub">Conquer Blocks</span>
   </a>
-
-  <nav class="topbar-nav" aria-label="Secciones">
-    <a href="/" class:list={[{ active: active === 'apuntes' }]}>Temario</a>
-    <a href="/sql/proyecto-final">Proyecto final</a>
-  </nav>
 
   {withSidebarToggle && (
     <button
