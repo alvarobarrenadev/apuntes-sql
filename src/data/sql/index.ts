@@ -12,6 +12,7 @@ import { topic04 } from './topic-04';
 import { topic05 } from './topic-05';
 import { topic06 } from './topic-06';
 import { topic07 } from './topic-07';
+import { topic08 } from './topic-08';
 
 // ----------------------------------------------------------------
 //  Ensamblar lecciones con prev/next/order
@@ -25,6 +26,7 @@ const RAW = [
   ...topic05,
   ...topic06,
   ...topic07,
+  ...topic08,
 ];
 
 export const lessons: Lesson[] = RAW.map((raw, i) => ({
@@ -65,7 +67,11 @@ const TOPIC_META: Record<string, { shortTitle: string; description: string }> = 
   },
   '07': {
     shortTitle: 'Optimización',
-    description: 'Índices, EXPLAIN, normalización y convenciones. Cierre del módulo con el proyecto final.',
+    description: 'Índices, EXPLAIN, normalización y convenciones de diseño para bases de datos de producción.',
+  },
+  '08': {
+    shortTitle: 'Proyecto final',
+    description: 'Sistema de gestión de biblioteca construido desde cero integrando todos los conceptos del módulo.',
   },
 };
 

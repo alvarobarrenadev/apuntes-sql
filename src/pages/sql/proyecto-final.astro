@@ -4,149 +4,219 @@ import Icon from '../../components/Icon.astro';
 import Badge from '../../components/Badge.astro';
 import Breadcrumbs from '../../components/Breadcrumbs.astro';
 import Section from '../../components/Section.astro';
-import EmptyState from '../../components/EmptyState.astro';
 import CodeBlock from '../../components/CodeBlock.astro';
+import Callout from '../../components/Callout.astro';
+import LessonNav from '../../components/LessonNav.astro';
+import CompleteButton from '../../components/CompleteButton.astro';
 import { findLesson } from '../../data/sql';
 
 const lesson = findLesson('proyecto-final')!;
 
-const sections = [
-  { id: 'objetivo',     n: '01', title: 'Objetivo del proyecto',  empty: 'Objetivo pendiente de definir con el enunciado real.' },
-  { id: 'requisitos',   n: '02', title: 'Requisitos funcionales', empty: 'Listado de requisitos pendiente de añadir.' },
-  { id: 'modelo',       n: '03', title: 'Modelo de datos',        empty: 'Diagrama del modelo pendiente de añadir.' },
-  { id: 'tablas',       n: '04', title: 'Tablas necesarias',      empty: 'Listado de tablas pendiente de añadir.' },
-  { id: 'relaciones',   n: '05', title: 'Relaciones',             empty: 'Definición de relaciones pendiente.' },
-  { id: 'consultas',    n: '06', title: 'Consultas obligatorias', empty: 'Consultas obligatorias pendientes de definir.' },
-  { id: 'entrega',      n: '07', title: 'Checklist de entrega',   empty: 'Checklist de entrega pendiente de definir.' },
-  { id: 'mejoras',      n: '08', title: 'Mejoras opcionales',     empty: 'Mejoras opcionales pendientes de definir.' },
-  { id: 'final',        n: '09', title: 'Entrega final',          empty: 'Instrucciones de entrega pendientes.' },
-];
+const STATUS_BADGE = {
+  pending:       { label: 'Pendiente',  variant: 'muted' as const,   dot: false },
+  'in-progress': { label: 'En curso',   variant: 'primary' as const, dot: true },
+  completed:     { label: 'Completada', variant: 'sql' as const,     dot: false },
+};
+const status = STATUS_BADGE[lesson.status];
 ---
 
 <DocsLayout
   title="Proyecto Final · Sistema de Gestión de Biblioteca — Apuntes SQL"
   activeSlug="proyecto-final"
 >
-  <!-- Hero -->
-  <section class="fp-hero" aria-labelledby="fp-title">
-    <div class="fp-hero__grid-bg" aria-hidden="true" />
+  <div class="docs__inner docs__layout">
+    <article class="docs__article">
+      <Breadcrumbs items={[
+        { label: 'Apuntes SQL', href: '/' },
+        { label: `Tema ${lesson.topicNumber} · ${lesson.topic}`, href: `/#tema-${lesson.topicNumber}` },
+        { label: 'Proyecto Final' },
+      ]} />
 
-    <div class="fp-hero__inner">
-      <span class="fp-hero__badge" aria-hidden="true">
-        <Icon name="trophy" size={40} />
-      </span>
+      <div class="class-meta" style="margin-top: 1rem;">
+        <Badge variant={status.variant} dot={status.dot}>{status.label}</Badge>
+        <Badge variant="warn"><Icon name="trophy" size={10} />Proyecto final</Badge>
+        <span class="chip">Clase {lesson.classNumber}</span>
+        <span class="chip">Tema {lesson.topicNumber}</span>
+      </div>
 
-      <div class="fp-hero__body">
-        <Breadcrumbs items={[
-          { label: 'Apuntes SQL', href: '/' },
-          { label: `Tema ${lesson.topicNumber} · ${lesson.topic}`, href: `/#tema-${lesson.topicNumber}` },
-          { label: 'Proyecto Final' },
-        ]} />
+      <h1 class="class-title">{lesson.title}</h1>
 
-        <div class="fp-hero__chips" style="margin-top: 1rem;">
-          <Badge variant="warn"><Icon name="trophy" size={10} />Proyecto final</Badge>
-          <Badge variant="muted">Clase {lesson.classNumber}</Badge>
-          <Badge variant="sql"><Icon name="flag" size={10} />Cierre del temario</Badge>
+      {lesson.summary && <p class="class-lead">{lesson.summary}</p>}
+
+      {lesson.tags.length > 0 && (
+        <div class="class-tags">
+          {lesson.tags.map((tag) => <span class="chip">#{tag}</span>)}
         </div>
+      )}
 
-        <h1 id="fp-title" class="fp-hero__title">
-          Sistema de Gestión<br />
-          <span class="fp-hero__title-accent">de Biblioteca</span>
-        </h1>
-
-        <p class="fp-hero__lead">
-          Cierre del módulo de SQL. El enunciado, el modelo de datos, las consultas
-          obligatorias y los criterios de entrega se publicarán cuando se importe
-          el contenido real de la clase. Esta página deja la estructura visual
-          preparada para recibirlos.
-        </p>
-
-        <div class="fp-hero__stats">
-<span><Icon name="chart" size={14} />Dificultad <strong style="color: var(--warn);">Avanzada</strong></span>
-          <span><Icon name="table" size={14} />Modelo <strong>pendiente</strong></span>
-          <span><Icon name="code" size={14} />Consultas <strong>pendientes</strong></span>
-        </div>
-      </div>
-
-      <div class="fp-hero__cta">
-        <button type="button" class="btn btn--primary" disabled aria-disabled="true">
-          <Icon name="play" size={11} />
-          Empezar proyecto
-        </button>
-        <button type="button" class="btn btn--ghost" disabled aria-disabled="true">
-          <Icon name="bookmark" size={13} />
-          Guardar
-        </button>
-      </div>
-    </div>
-  </section>
-
-  <div class="fp-body">
-    <!-- Objetivo + Aprenderás (placeholders) -->
-    <div class="fp-twocol">
-      <div class="card">
-        <p class="eyebrow" style="color: var(--warn); margin-bottom: 0.625rem;">
-          <Icon name="flag" size={11} /> Objetivo
-        </p>
-        <EmptyState
-          title="Objetivo pendiente"
-          text="El enunciado y el alcance del proyecto se publicarán cuando se importe la clase 08 real."
-        />
-      </div>
-      <div class="card">
-        <p class="eyebrow" style="color: var(--sql); margin-bottom: 0.625rem;">
-          <Icon name="spark" size={11} /> Aprenderás a
-        </p>
-        <EmptyState
-          title="Objetivos de aprendizaje pendientes"
-          text="Esta lista se completará junto al enunciado real del proyecto final."
-        />
-      </div>
-    </div>
-
-    {sections.map((s) => (
-      <Section id={s.id} title={s.title} eyebrow={s.n}>
-        {s.id === 'consultas' ? (
-          <CodeBlock empty emptyText="Las consultas obligatorias se publicarán como bloques de código cuando se importe el enunciado real." />
-        ) : s.id === 'modelo' ? (
-          <div class="card" style="padding: 0;">
-            <EmptyState
-              title="Diagrama del modelo de datos pendiente"
-              text="El diagrama relacional con las tablas y relaciones se añadirá tras la importación de la clase real."
-              icon="table"
-            />
-          </div>
-        ) : s.id === 'requisitos' || s.id === 'tablas' ? (
-          <div class="fp-rf-grid">
-            {[1, 2, 3, 4].map(() => (
-              <div class="card empty empty--compact">
-                <span class="empty__ico" aria-hidden="true"><Icon name="sparkle" size={16} /></span>
-                <div class="empty__body">
-                  <p class="empty__title">Pendiente</p>
-                  <p class="empty__text">Se completará con el contenido real.</p>
-                </div>
-              </div>
-            ))}
-          </div>
-        ) : (
-          <EmptyState title={s.empty} />
-        )}
+      {/* 01 — RESUMEN */}
+      <Section id="resumen" title="Resumen rápido" eyebrow="01">
+        <p class="lesson-prose__p">{lesson.summary}</p>
       </Section>
-    ))}
 
-    <div class="fp-final-cta">
-      <Icon name="trophy" size={36} />
-      <div class="fp-final-cta__body">
-        <h3 class="h3 fp-final-cta__title">Cierre del temario por todo lo alto</h3>
-        <p class="fp-final-cta__sub">
-          Al importar el enunciado real del proyecto, esta página se completará
-          con requisitos, modelo de datos, consultas obligatorias y checklist de entrega.
-        </p>
+      {/* 02 — CONCEPTOS CLAVE */}
+      <Section id="conceptos" title="Conceptos clave" eyebrow="02">
+        <div class="concepts-grid">
+          {lesson.keyConcepts.map((kc) => (
+            <div class="card concept-card">
+              <div class="concept-card__fn">{kc.term}</div>
+              <p class="concept-card__desc">{kc.definition}</p>
+            </div>
+          ))}
+        </div>
+      </Section>
+
+      {/* 03 — CONTENIDO */}
+      <Section id="contenido" title="Contenido de la clase" eyebrow="03">
+        <div class="lesson-prose">
+          {lesson.contenido.map((section) => (
+            <div class="lesson-prose__section">
+              {section.heading && <h3 class="lesson-prose__h3">{section.heading}</h3>}
+              {section.blocks.map((block) => (
+                <>
+                  {block.type === 'p' && (
+                    <p class="lesson-prose__p">{block.text}</p>
+                  )}
+                  {block.type === 'ul' && (
+                    <ul class="lesson-prose__list">
+                      {block.items.map((item) => <li>{item}</li>)}
+                    </ul>
+                  )}
+                  {block.type === 'ol' && (
+                    <ol class="lesson-prose__list lesson-prose__list--ol">
+                      {block.items.map((item) => <li>{item}</li>)}
+                    </ol>
+                  )}
+                  {block.type === 'callout' && (
+                    <Callout type={block.variant} title={block.title}>
+                      {block.text}
+                    </Callout>
+                  )}
+                  {block.type === 'table' && (
+                    <div class="lesson-prose__table-wrap">
+                      <table class="lesson-prose__table">
+                        <thead>
+                          <tr>
+                            {block.headers.map((h) => <th>{h}</th>)}
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {block.rows.map((row) => (
+                            <tr>
+                              {row.map((cell) => <td>{cell}</td>)}
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  )}
+                </>
+              ))}
+            </div>
+          ))}
+        </div>
+      </Section>
+
+      {/* 04 — CÓDIGO Y EJEMPLOS */}
+      <Section id="codigo" title="Código y ejemplos" eyebrow="04">
+        <div class="code-examples">
+          {lesson.codeExamples.map((ex) => (
+            <div class="code-example">
+              {ex.label && <p class="code-example__label">{ex.label}</p>}
+              <CodeBlock code={ex.code} lang={ex.lang ?? 'sql'} />
+              {ex.note && <p class="code-example__note">{ex.note}</p>}
+            </div>
+          ))}
+        </div>
+      </Section>
+
+      {/* 05 — ERRORES COMUNES */}
+      <Section id="errores" title="Errores comunes" eyebrow="05">
+        <div class="insight-cards">
+          {lesson.errores.map((e) => (
+            <div class="insight-card insight-card--err">
+              <span class="insight-card__ico" aria-hidden="true">x</span>
+              <span>{e}</span>
+            </div>
+          ))}
+        </div>
+      </Section>
+
+      {/* 06 — BUENAS PRÁCTICAS */}
+      <Section id="practicas" title="Buenas prácticas" eyebrow="06">
+        <div class="insight-cards">
+          {lesson.practicas.map((p) => (
+            <div class="insight-card insight-card--tip">
+              <span class="insight-card__ico" aria-hidden="true">✓</span>
+              <span>{p}</span>
+            </div>
+          ))}
+        </div>
+      </Section>
+
+      {/* 07 — EJERCICIOS */}
+      <Section id="ejercicios" title="Ejercicios" eyebrow="07">
+        <ol class="lesson-prose__list lesson-prose__list--ol">
+          {lesson.ejercicios.map((e) => <li>{e}</li>)}
+        </ol>
+      </Section>
+
+      {/* 08 — CHECKLIST */}
+      <Section id="checklist" title="Checklist final" eyebrow="08">
+        <ul class="lesson-checklist">
+          {lesson.checklist.map((item) => (
+            <li class="lesson-checklist__item">
+              <span class="lesson-checklist__box" aria-hidden="true" />
+              <span>{item.text}</span>
+            </li>
+          ))}
+        </ul>
+      </Section>
+
+      <LessonNav prevSlug={lesson.previousSlug} nextSlug={lesson.nextSlug} />
+
+      <div style="margin-top: 1.25rem;">
+        <CompleteButton slug={lesson.slug} />
       </div>
-      <a class="btn btn--ghost" href="/">
-        <Icon name="arrow-left" size={11} />
-        Volver al temario
-      </a>
-    </div>
+    </article>
+
+    <!-- TOC -->
+    <aside class="toc" aria-label="Índice de la clase">
+      <p class="toc__title">En esta clase</p>
+      <a class="toc__link" href="#resumen">Resumen rápido</a>
+      <a class="toc__link" href="#conceptos">Conceptos clave</a>
+      <a class="toc__link" href="#contenido">Contenido</a>
+      <a class="toc__link" href="#codigo">Código y ejemplos</a>
+      <a class="toc__link" href="#errores">Errores comunes</a>
+      <a class="toc__link" href="#practicas">Buenas prácticas</a>
+      <a class="toc__link" href="#ejercicios">Ejercicios</a>
+      <a class="toc__link" href="#checklist">Checklist</a>
+    </aside>
   </div>
 </DocsLayout>
+
+<script>
+  const sections = Array.from(document.querySelectorAll<HTMLElement>('article.docs__article section.section'));
+  const links = new Map<string, HTMLAnchorElement>();
+  document.querySelectorAll<HTMLAnchorElement>('.toc .toc__link').forEach((a) => {
+    const id = a.getAttribute('href')?.slice(1);
+    if (id) links.set(id, a);
+  });
+
+  if (sections.length && links.size) {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          const link = links.get(entry.target.id);
+          if (!link) return;
+          if (entry.isIntersecting) {
+            links.forEach((l) => l.classList.remove('is-active'));
+            link.classList.add('is-active');
+          }
+        });
+      },
+      { rootMargin: '-30% 0px -55% 0px', threshold: 0 },
+    );
+    sections.forEach((s) => observer.observe(s));
+  }
+</script>

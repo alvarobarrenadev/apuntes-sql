@@ -633,12 +633,4 @@ DROP INDEX idx_rental_customer_date ON rental;`,
     ],
   },
 
-  {
-    id: '08', slug: 'proyecto-final',
-    title: 'Proyecto Final — Sistema de Gestión de Biblioteca',
-    topic: 'Optimización y Buenas Prácticas', topicNumber: '07', classNumber: '08',
-    type: 'project', status: 'pending', contentStatus: 'empty', difficulty: 4, estimatedTime: '3 h',
-    tags: ['Proyecto final', 'Modelado', 'JOINs', 'Índices'],
-    summary: null, keyConcepts: [], contenido: [], codeExamples: [], errores: [], practicas: [], ejercicios: [], checklist: [],
-  },
 ];
