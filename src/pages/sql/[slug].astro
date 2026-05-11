@@ -9,6 +9,7 @@ import Callout from '../../components/Callout.astro';
 import LessonNav from '../../components/LessonNav.astro';
 import CompleteButton from '../../components/CompleteButton.astro';
 import { lessons } from '../../data/sql';
+import { withBase } from '../../utils/paths';
 
 export function getStaticPaths() {
   return lessons
@@ -38,8 +39,8 @@ const status = STATUS_BADGE[lesson.status];
   <div class="docs__inner docs__layout">
     <article class="docs__article">
       <Breadcrumbs items={[
-        { label: 'Apuntes SQL', href: '/' },
-        { label: `Tema ${lesson.topicNumber} · ${lesson.topic}`, href: `/#tema-${lesson.topicNumber}` },
+        { label: 'Apuntes SQL', href: withBase('/') },
+        { label: `Tema ${lesson.topicNumber} · ${lesson.topic}`, href: withBase(`/#tema-${lesson.topicNumber}`) },
         { label: `Clase ${lesson.classNumber}` },
       ]} />
 

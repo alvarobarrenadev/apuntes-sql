@@ -5,6 +5,7 @@ import Badge from '../components/Badge.astro';
 import TopicRow from '../components/TopicRow.astro';
 import ProgressBar from '../components/ProgressBar.astro';
 import { sqlModule, topics, lessons } from '../data/sql';
+import { withBase } from '../utils/paths';
 
 const completed = lessons.filter((l) => l.status === 'completed').length;
 ---
@@ -73,7 +74,7 @@ const completed = lessons.filter((l) => l.status === 'completed').length;
     </section>
 
     <!-- Final project access -->
-    <a class="sql-final-access" href={`/${sqlModule.slug}/${sqlModule.finalProjectSlug}`}>
+    <a class="sql-final-access" href={withBase(`/${sqlModule.slug}/${sqlModule.finalProjectSlug}`)}>
       <span class="sql-final-access__icon" aria-hidden="true">
         <Icon name="trophy" size={22} />
       </span>

@@ -1,5 +1,6 @@
 ---
 import Icon from './Icon.astro';
+import { withBase } from '../utils/paths';
 
 interface Props {
   /** When true, render a "menu" button (mobile) that toggles the sidebar via `data-sidebar-toggle`. */
@@ -10,7 +11,7 @@ const { withSidebarToggle = false } = Astro.props;
 ---
 
 <header class="topbar">
-  <a class="brand" href="/" aria-label="Apuntes SQL · Inicio">
+  <a class="brand" href={withBase('/')} aria-label="Apuntes SQL · Inicio">
     <span class="brand-mark" aria-hidden="true">
       <Icon name="database" size={16} stroke={1.8} />
     </span>

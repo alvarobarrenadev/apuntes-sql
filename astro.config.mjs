@@ -7,6 +7,7 @@ import fs from 'node:fs';
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const sassRoot = resolve(__dirname, 'src/sass');
 
+/** @type {import('sass').FileImporter<'sync'>} */
 const sassAliasImporter = {
   findFileUrl(url) {
     if (!url.startsWith('@')) return null;
@@ -29,6 +30,8 @@ const sassAliasImporter = {
 
 // https://astro.build/config
 export default defineConfig({
+  site: 'https://alvarobarrenadev.github.io',
+  base: '/apuntes-sql',
   vite: {
     css: {
       preprocessorOptions: {

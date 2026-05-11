@@ -1,6 +1,7 @@
 ---
 import Icon from './Icon.astro';
 import { findLesson, sqlModule } from '../data/sql';
+import { withBase } from '../utils/paths';
 
 interface Props {
   prevSlug?: string | null;
@@ -12,7 +13,9 @@ const prev = prevSlug ? findLesson(prevSlug) : null;
 const next = nextSlug ? findLesson(nextSlug) : null;
 
 function hrefFor(slug: string, isProject: boolean) {
-  return isProject ? `/${sqlModule.slug}/${sqlModule.finalProjectSlug}` : `/${sqlModule.slug}/${slug}`;
+  return isProject
+    ? withBase(`/${sqlModule.slug}/${sqlModule.finalProjectSlug}`)
+    : withBase(`/${sqlModule.slug}/${slug}`);
 }
 ---
 
