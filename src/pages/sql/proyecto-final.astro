@@ -33,7 +33,7 @@ const status = STATUS_BADGE[lesson.status];
       ]} />
 
       <div class="class-meta" style="margin-top: 1rem;">
-        <Badge variant={status.variant} dot={status.dot}>{status.label}</Badge>
+        {lesson.status !== 'pending' && <Badge variant={status.variant} dot={status.dot}>{status.label}</Badge>}
         <Badge variant="warn"><Icon name="trophy" size={10} />Proyecto final</Badge>
         <span class="chip">Clase {lesson.classNumber}</span>
         <span class="chip">Tema {lesson.topicNumber}</span>
