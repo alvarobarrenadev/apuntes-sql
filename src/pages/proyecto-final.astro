@@ -1,15 +1,15 @@
 ---
-import DocsLayout from '../../layouts/DocsLayout.astro';
-import Icon from '../../components/Icon.astro';
-import Badge from '../../components/Badge.astro';
-import Breadcrumbs from '../../components/Breadcrumbs.astro';
-import Section from '../../components/Section.astro';
-import CodeBlock from '../../components/CodeBlock.astro';
-import Callout from '../../components/Callout.astro';
-import LessonNav from '../../components/LessonNav.astro';
-import CompleteButton from '../../components/CompleteButton.astro';
-import { findLesson } from '../../data/sql';
-import { withBase } from '../../utils/paths';
+import DocsLayout from '../layouts/DocsLayout.astro';
+import Icon from '../components/Icon.astro';
+import Badge from '../components/Badge.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+import Section from '../components/Section.astro';
+import CodeBlock from '../components/CodeBlock.astro';
+import Callout from '../components/Callout.astro';
+import LessonNav from '../components/LessonNav.astro';
+import CompleteButton from '../components/CompleteButton.astro';
+import { findLesson } from '../data/sql';
+import { withBase } from '../utils/paths';
 
 const lesson = findLesson('proyecto-final')!;
 

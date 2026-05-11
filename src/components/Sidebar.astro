@@ -1,6 +1,6 @@
 ---
 import Icon from './Icon.astro';
-import { topics, sqlModule, topicStatus } from '../data/sql';
+import { topics, topicStatus } from '../data/sql';
 import { withBase } from '../utils/paths';
 
 interface Props {
@@ -51,8 +51,8 @@ if (activeSlug) {
                   : l.status === 'in-progress' ? 'is-doing'
                   : '';
                 const href = l.type === 'project'
-                  ? withBase(`/${sqlModule.slug}/${sqlModule.finalProjectSlug}`)
-                  : withBase(`/${sqlModule.slug}/${l.slug}`);
+                  ? withBase(`/proyecto-final`)
+                  : withBase(`/${l.slug}`);
                 return (
                   <a
                     href={href}

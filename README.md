@@ -49,9 +49,8 @@ Requiere Node.js `>=22.12.0`.
 Rutas principales:
 
 - `/`: indice del modulo, buscador y listado de temas.
-- `/sql/[slug]`: pagina estatica de cada clase.
-- `/sql/proyecto-final`: pagina del proyecto final.
-- `/sql`: redirige a `/`.
+- `/[slug]`: pagina estatica de cada clase.
+- `/proyecto-final`: pagina del proyecto final.
 
 ## Scripts
 
@@ -122,7 +121,7 @@ El archivo `src/data/sql/index.ts` ensambla todas las lecciones, calcula el orde
 4. Completa los campos de contenido que renderiza la plantilla de clase.
 5. Si el tema es nuevo, actualiza `TOPIC_META` en `src/data/sql/index.ts`.
 
-Las rutas estaticas se generan desde `src/pages/sql/[slug].astro`. Las lecciones de tipo `project` no se incluyen ahi porque el proyecto final tiene su propia pagina en `src/pages/sql/proyecto-final.astro`.
+Las rutas estaticas se generan desde `src/pages/[slug].astro`. Las lecciones de tipo `project` no se incluyen ahi porque el proyecto final tiene su propia pagina en `src/pages/proyecto-final.astro`.
 
 ## Estilos
 

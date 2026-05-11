@@ -3,7 +3,6 @@ import Icon from './Icon.astro';
 import Badge from './Badge.astro';
 import Difficulty from './Difficulty.astro';
 import type { Lesson } from '../data/sql';
-import { sqlModule } from '../data/sql';
 import { withBase } from '../utils/paths';
 
 interface Props {
@@ -26,8 +25,8 @@ const stateClass =
   : '';
 
 const href = lesson.type === 'project'
-  ? withBase(`/${sqlModule.slug}/${sqlModule.finalProjectSlug}`)
-  : withBase(`/${sqlModule.slug}/${lesson.slug}`);
+  ? withBase(`/proyecto-final`)
+  : withBase(`/${lesson.slug}`);
 ---
 
 <a class:list={['lesson-row', stateClass]} href={href}>
